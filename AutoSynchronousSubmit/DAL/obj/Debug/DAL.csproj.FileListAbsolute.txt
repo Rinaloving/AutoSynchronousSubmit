@@ -1,0 +1,15 @@
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\DAL.dll.config
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\DAL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\DAL.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\Model.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\NPoco.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\Oracle.ManagedDataAccess.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\Model.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\obj\Debug\DAL.csprojAssemblyReference.cache
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\obj\Debug\DAL.csproj.CopyComplete
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\obj\Debug\DAL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\obj\Debug\DAL.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\Oracle.DataAccess.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\IDAL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\DAL\bin\Debug\IDAL.pdb

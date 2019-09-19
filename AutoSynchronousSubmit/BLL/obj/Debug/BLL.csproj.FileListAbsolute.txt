@@ -1,0 +1,15 @@
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\BLL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\BLL.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\DAL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\Model.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\NPoco.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\DAL.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\DAL.dll.config
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\Model.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\obj\Debug\BLL.csprojAssemblyReference.cache
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\obj\Debug\BLL.csproj.CoreCompileInputs.cache
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\obj\Debug\BLL.csproj.CopyComplete
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\obj\Debug\BLL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\obj\Debug\BLL.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\IDAL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\BLL\bin\Debug\IDAL.pdb

@@ -1,0 +1,7 @@
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\bin\Debug\Model.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\bin\Debug\Model.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\bin\Debug\NPoco.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model.csproj.CopyComplete
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model.pdb

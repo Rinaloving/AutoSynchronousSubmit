@@ -1,0 +1,6 @@
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\bin\Debug\IDAL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\bin\Debug\IDAL.pdb
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\obj\Debug\IDAL.csprojAssemblyReference.cache
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\obj\Debug\IDAL.csproj.CoreCompileInputs.cache
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\obj\Debug\IDAL.dll
+D:\GitHub\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\obj\Debug\IDAL.pdb
