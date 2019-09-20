@@ -42,3 +42,4 @@ D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\AutoSynchronousSubmit
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\AutoSynchronousSubmit\obj\Debug\AutoSynchronousSubmit.csproj.CopyComplete
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\AutoSynchronousSubmit\obj\Debug\AutoSynchronousSubmit.exe
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\AutoSynchronousSubmit\obj\Debug\AutoSynchronousSubmit.pdb
+D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\AutoSynchronousSubmit\bin\Debug\Oracle.ManagedDataAccess.dll
