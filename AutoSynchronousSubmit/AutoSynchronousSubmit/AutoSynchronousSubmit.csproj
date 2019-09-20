@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonClass\AreaCode.cs" />
+    <Compile Include="CommonClass\SystemHandler.cs" />
     <Compile Include="CommonClass\XmlControl.cs" />
     <Compile Include="CommonClass\XMLHelper.cs" />
     <Compile Include="SynchronousSubmit.cs">
