@@ -41,6 +41,7 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.circularProgressBar1 = new CircularProgressBar.CircularProgressBar();
             this.menuStrip1.SuspendLayout();
             this.skinTabControl1.SuspendLayout();
             this.skinTabPage2.SuspendLayout();
@@ -99,7 +100,7 @@
             // 
             this.tmiStart.Image = ((System.Drawing.Image)(resources.GetObject("tmiStart.Image")));
             this.tmiStart.Name = "tmiStart";
-            this.tmiStart.Size = new System.Drawing.Size(68, 31);
+            this.tmiStart.Size = new System.Drawing.Size(71, 31);
             this.tmiStart.Text = "启动";
             this.tmiStart.Click += new System.EventHandler(this.TmiStart_Click);
             // 
@@ -107,14 +108,14 @@
             // 
             this.tmiStop.Image = ((System.Drawing.Image)(resources.GetObject("tmiStop.Image")));
             this.tmiStop.Name = "tmiStop";
-            this.tmiStop.Size = new System.Drawing.Size(68, 31);
+            this.tmiStop.Size = new System.Drawing.Size(71, 31);
             this.tmiStop.Text = "暂停";
             // 
             // tmiClose
             // 
             this.tmiClose.Image = ((System.Drawing.Image)(resources.GetObject("tmiClose.Image")));
             this.tmiClose.Name = "tmiClose";
-            this.tmiClose.Size = new System.Drawing.Size(68, 31);
+            this.tmiClose.Size = new System.Drawing.Size(71, 31);
             this.tmiClose.Text = "退出";
             // 
             // skinTabControl1
@@ -138,7 +139,7 @@
             this.skinTabControl1.PageImagePosition = CCWin.SkinControl.SkinTabControl.ePageImagePosition.Left;
             this.skinTabControl1.PageNorml = null;
             this.skinTabControl1.SelectedIndex = 1;
-            this.skinTabControl1.Size = new System.Drawing.Size(759, 361);
+            this.skinTabControl1.Size = new System.Drawing.Size(502, 361);
             this.skinTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.skinTabControl1.TabIndex = 1;
             // 
@@ -150,7 +151,7 @@
             this.skinTabPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.skinTabPage1.Location = new System.Drawing.Point(0, 50);
             this.skinTabPage1.Name = "skinTabPage1";
-            this.skinTabPage1.Size = new System.Drawing.Size(759, 311);
+            this.skinTabPage1.Size = new System.Drawing.Size(502, 311);
             this.skinTabPage1.TabIndex = 0;
             this.skinTabPage1.TabItemImage = ((System.Drawing.Image)(resources.GetObject("skinTabPage1.TabItemImage")));
             this.skinTabPage1.Text = "配置详情";
@@ -162,18 +163,17 @@
             this.skinTabPage2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.skinTabPage2.Location = new System.Drawing.Point(0, 50);
             this.skinTabPage2.Name = "skinTabPage2";
-            this.skinTabPage2.Size = new System.Drawing.Size(759, 311);
+            this.skinTabPage2.Size = new System.Drawing.Size(502, 311);
             this.skinTabPage2.TabIndex = 1;
             this.skinTabPage2.TabItemImage = ((System.Drawing.Image)(resources.GetObject("skinTabPage2.TabItemImage")));
             this.skinTabPage2.Text = "运行详情";
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.HiglightColor = CCWin.SkinControl.RtfRichTextBox.RtfColor.White;
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(759, 311);
+            this.richTextBox1.Size = new System.Drawing.Size(502, 311);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextColor = CCWin.SkinControl.RtfRichTextBox.RtfColor.Black;
@@ -193,11 +193,43 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // circularProgressBar1
+            // 
+            this.circularProgressBar1.AnimationFunction = WinFormAnimation.KnownAnimationFunctions.Liner;
+            this.circularProgressBar1.AnimationSpeed = 500;
+            this.circularProgressBar1.BackColor = System.Drawing.Color.Transparent;
+            this.circularProgressBar1.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.circularProgressBar1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.circularProgressBar1.InnerColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(208)))), ((int)(((byte)(255)))));
+            this.circularProgressBar1.InnerMargin = 2;
+            this.circularProgressBar1.InnerWidth = -1;
+            this.circularProgressBar1.Location = new System.Drawing.Point(532, 158);
+            this.circularProgressBar1.MarqueeAnimationSpeed = 2000;
+            this.circularProgressBar1.Name = "circularProgressBar1";
+            this.circularProgressBar1.OuterColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.circularProgressBar1.OuterMargin = -25;
+            this.circularProgressBar1.OuterWidth = 26;
+            this.circularProgressBar1.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.circularProgressBar1.ProgressWidth = 25;
+            this.circularProgressBar1.SecondaryFont = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.circularProgressBar1.Size = new System.Drawing.Size(253, 243);
+            this.circularProgressBar1.StartAngle = 270;
+            this.circularProgressBar1.Step = 1;
+            this.circularProgressBar1.SubscriptColor = System.Drawing.Color.MintCream;
+            this.circularProgressBar1.SubscriptMargin = new System.Windows.Forms.Padding(10, -35, 0, 0);
+            this.circularProgressBar1.SubscriptText = "";
+            this.circularProgressBar1.SuperscriptColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.circularProgressBar1.SuperscriptMargin = new System.Windows.Forms.Padding(10, 35, 0, 0);
+            this.circularProgressBar1.SuperscriptText = "";
+            this.circularProgressBar1.TabIndex = 2;
+            this.circularProgressBar1.TextMargin = new System.Windows.Forms.Padding(8, 8, 0, 0);
+            // 
             // SynchronousSubmit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.circularProgressBar1);
             this.Controls.Add(this.skinTabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -206,6 +238,7 @@
             this.Name = "SynchronousSubmit";
             this.Text = "德州报文解析录库";
             this.TitleOffset = new System.Drawing.Point(5, 3);
+            this.Load += new System.EventHandler(this.SynchronousSubmit_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.skinTabControl1.ResumeLayout(false);
@@ -228,6 +261,7 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private CircularProgressBar.CircularProgressBar circularProgressBar1;
     }
 }
 

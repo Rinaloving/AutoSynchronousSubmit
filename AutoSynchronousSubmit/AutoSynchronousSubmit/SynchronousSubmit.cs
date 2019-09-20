@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -20,6 +21,12 @@ namespace AutoSynchronousSubmit
 {
     public partial class SynchronousSubmit : CCSkinMain
     {
+
+       
+       // CircularProgressBar.CircularProgressBar cbar = new CircularProgressBar.CircularProgressBar();
+
+
+
         public SynchronousSubmit()
         {
             InitializeComponent();
@@ -34,33 +41,53 @@ namespace AutoSynchronousSubmit
 
         private void TmiStart_Click(object sender, EventArgs e)
         {
+            //测试进度条
+
+            UpdateCircleBar();
+
+
             // 测试连接数据库
-            BizandrepManager bm = new BizandrepManager();
-            string sql = @"select * from bizandrep";
-            var result = bm.Query(sql);
+            //BizandrepManager bm = new BizandrepManager();
+            //string sql = @"select * from bizandrep";
+            //var result = bm.Query(sql);
 
-            string path = @"D:\dzxml\371425\BizMsg";
+            //string path = @"D:\dzxml\371425\BizMsg";
 
-            string[] files = XMLHelper.GetBizFile(path);
+            //string[] files = XMLHelper.GetBizFile(path);
 
-            foreach (var file in files)
+            //foreach (var file in files)
+            //{
+            //    List<dynamic> entities = GetSmtInstance(file);
+            //    string[] entityName = GetBizDataSonNodeName(file).ToArray();
+            //    int index = 0;
+            //    foreach (var entity in entities)
+            //    {            
+            //        EntityManager em = new EntityManager();
+            //        em.Insert(entityName[index], "PID", false, entity);
+            //        index++;
+            //    }
+
+            //}
+
+
+
+
+
+        }
+
+        public  void  UpdateCircleBar()
+        {
+            for (int i = 0; i <= 100; i++)
             {
-                List<dynamic> entities = GetSmtInstance(file);
-                string[] entityName = GetBizDataSonNodeName(file).ToArray();
-                int index = 0;
-                foreach (var entity in entities)
-                {            
-                    EntityManager em = new EntityManager();
-                    em.Insert(entityName[index], "PID", false, entity);
-                    index++;
-                }
+
+                circularProgressBar1.Value = i;
+                circularProgressBar1.Update();
+
+                circularProgressBar1.Text = i.ToString() + "%";
+                Application.DoEvents();
+                Thread.Sleep(100);
 
             }
-
-           
-
-
-
         }
 
         public List<string> GetBizDataSonNodeName(string file)
@@ -173,6 +200,12 @@ namespace AutoSynchronousSubmit
             return result;
         }
 
-
+        private void SynchronousSubmit_Load(object sender, EventArgs e)
+        {
+            circularProgressBar1.Value = 0;
+            //circularProgressBar1.Maximum = 100;
+            //circularProgressBar1.Minimum = 0;
+   
+        }
     }
 }
