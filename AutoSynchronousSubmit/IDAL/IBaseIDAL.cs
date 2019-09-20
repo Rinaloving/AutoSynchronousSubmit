@@ -17,6 +17,8 @@ namespace IDAL
 
         int Insert(T entity);
 
+        object Insert(string entityName, string pkey, bool b, T endtity);
+
 
         int Update(T entity);
 

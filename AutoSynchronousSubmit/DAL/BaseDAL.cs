@@ -24,6 +24,11 @@ namespace DAL
             throw new NotImplementedException();
         }
 
+        public object Insert(string entityName, string pkey, bool b, T endtity)
+        {
+            return context.Insert(entityName,pkey,b,endtity);
+        }
+
         public ICollection<T> Query(string sql)
         {
            return context.Fetch<T>(sql);

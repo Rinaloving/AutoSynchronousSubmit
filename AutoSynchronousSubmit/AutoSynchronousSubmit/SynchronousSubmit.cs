@@ -35,28 +35,53 @@ namespace AutoSynchronousSubmit
         private void TmiStart_Click(object sender, EventArgs e)
         {
             // 测试连接数据库
-            //BizandrepManager bm = new BizandrepManager();
-            //string sql = @"select * from bizandrep";
-            //var result = bm.Query(sql);
+            BizandrepManager bm = new BizandrepManager();
+            string sql = @"select * from bizandrep";
+            var result = bm.Query(sql);
 
             string path = @"D:\dzxml\371425\BizMsg";
 
-            List<dynamic> entities = GetSmtInstance(path);
+            string[] files = XMLHelper.GetBizFile(path);
 
-            var result = "";
+            foreach (var file in files)
+            {
+                List<dynamic> entities = GetSmtInstance(file);
+                string[] entityName = GetBizDataSonNodeName(file).ToArray();
+                int index = 0;
+                foreach (var entity in entities)
+                {            
+                    EntityManager em = new EntityManager();
+                    em.Insert(entityName[index], "PID", false, entity);
+                    index++;
+                }
+
+            }
+
+           
 
 
 
         }
 
-        public List<dynamic> GetSmtInstance(string path)
+        public List<string> GetBizDataSonNodeName(string file)
+        {
+            List<string> nodeNames = new List<string>();
+            IEnumerable<XNode> val = XElement.Load(file).Element("Data").Nodes(); // 获取子节点值
+            foreach (var it in val)
+            {
+                XElement nodeName = (XElement)it; // 获取子节点值
+               nodeNames.Add(nodeName.Name.ToString()); // 当前节点名
+            }
+            return nodeNames;
+        }
+
+        public List<dynamic> GetSmtInstance(string file)
         {
             List<dynamic> lst = new List<dynamic>();
-            string[] files = XMLHelper.GetBizFile(path);
-            foreach (var item in files)
-            {
-                Head head = XMLHelper.GetBizHeadInfo(item);
-                IEnumerable<XNode> val = XElement.Load(item).Element("Data").Nodes(); // 获取子节点值
+          
+          
+                Head head = XMLHelper.GetBizHeadInfo(file);
+                IEnumerable<XNode> val = XElement.Load(file).Element("Data").Nodes(); // 获取子节点值
                 foreach (XNode it in val)
                 {
                     XElement val2 = (XElement)it; // 获取子节点值
@@ -112,7 +137,7 @@ namespace AutoSynchronousSubmit
 
                
 
-            }
+            
             return lst;
         }
 
