@@ -90,21 +90,25 @@ namespace AutoSynchronousSubmit
                     Thread.Sleep(100);
 
                     AnalysisBizFileToSubmit(files);
-                    //richTextBox1.AppendText("解析报文: " + Path.GetFileName(path) + " 完成！\n");
+                    
                     this.circleProgramBar1.Progress = i + 1;
                     Action<int> action = (data) =>
                     {
                         this.richTextBox1.AppendText("解析报文: " + Path.GetFileName(files[i]) + " 完成！\n");
-                        
+                        if (i == lenth)
+                        {
+                            this.richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
+                        }
                     };
 
                     Invoke(action, i);
+                    
                 }
 
             })));
             thread.IsBackground = true;
             thread.Start();
-
+            
 
         }
 
