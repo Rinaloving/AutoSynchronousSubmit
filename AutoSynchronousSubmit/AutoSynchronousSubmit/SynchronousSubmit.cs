@@ -131,7 +131,7 @@ namespace AutoSynchronousSubmit
 
         }
 
-        public void   BackUpBizFileUpdateCircleBar(long lenth, string p,int i,string localPath)
+        public void   BackUpBizFileUpdateCircleBar(double lenth, string p,double i,string localPath)
         {
 
             //string[] files = XMLHelper.GetBizFile(path);
@@ -139,8 +139,11 @@ namespace AutoSynchronousSubmit
  
                     
                   XMLHelper.BackupBizFile(p, localPath);
+  
+                  this.circleProgramBar1.MaxValue = (int)lenth;
+        
 
-                this.circleProgramBar1.Progress = i + 1;
+                  this.circleProgramBar1.Progress = (int)i+1;
                     Action<int> action = (data) =>
                     {
                         this.richTextBox1.AppendText("备份报文: " + Path.GetFileName(p) + " 完成！\n");
@@ -150,7 +153,7 @@ namespace AutoSynchronousSubmit
                         }
                     };
 
-                    Invoke(action, i);
+                    Invoke(action, (int)i);
 
                 
 
@@ -161,7 +164,7 @@ namespace AutoSynchronousSubmit
 
         }
 
-        public void   GroupBizFileUpdateCircleBar(long lenth, string p, int i, string analysisPath )
+        public void   GroupBizFileUpdateCircleBar(double lenth, string p, double i, string analysisPath )
         {
          
             //string[] files = XMLHelper.GetBizFile(path);
@@ -169,8 +172,13 @@ namespace AutoSynchronousSubmit
 
                 
                  XMLHelper.GroupByCreateDate(p, analysisPath); // 执行按日期分组
+                
+                this.circleProgramBar1.MaxValue = (int)lenth;
 
-                this.circleProgramBar1.Progress = i + 1;
+               
+
+                this.circleProgramBar1.Progress = (int)i + 1;
+
                 Action<int> action = (data) =>
                 {
                     this.richTextBox1.AppendText("分类报文: " + Path.GetFileName(p) + " 完成！\n");
@@ -180,7 +188,7 @@ namespace AutoSynchronousSubmit
                     }
                 };
 
-               Invoke(action, i);
+               Invoke(action, (int)i);
 
 
 
@@ -345,9 +353,11 @@ namespace AutoSynchronousSubmit
             //备份并执行按日期分组
             List<string> filelist = Directory.GetFiles(path, "*.xml").ToList();// 获取所有报文
             int i = 0;
+            int totalnum = filelist.Count;
             filelist.ForEach( p => {
-
-                BackUpBizFileUpdateCircleBar(filelist.Count, p, i, path);
+                Thread.Sleep(50);
+                double num = (((double)i / totalnum) * 100);
+                BackUpBizFileUpdateCircleBar(100, p, num, path);
                 i++;
             });
 
@@ -366,8 +376,13 @@ namespace AutoSynchronousSubmit
             if (!Directory.Exists(analysisPath)) { Directory.CreateDirectory(analysisPath); }
             List<string> analyfilelist = Directory.GetFiles(analysisPath, "*.xml").ToList();// 获取所有报文
             int j = 0;
+            int totalnum = analyfilelist.Count;
+
+
             analyfilelist.ForEach(p => {
-                GroupBizFileUpdateCircleBar(analyfilelist.Count, p, j, analysisPath);
+                Thread.Sleep(50);
+                double num = (((double)j / totalnum) * 100);
+                GroupBizFileUpdateCircleBar(100, p, num, analysisPath);
                 j++;
             });
 
