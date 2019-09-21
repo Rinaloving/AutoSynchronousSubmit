@@ -50,5 +50,11 @@ namespace AutoSynchronousSubmit.CommonClass
         }
         
 
+        public static void BackupBizFile(string oldPath, string newPath)
+        {
+
+
+        }
+
     }
 }

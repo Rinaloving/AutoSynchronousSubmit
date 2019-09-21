@@ -23,41 +23,60 @@ namespace AutoSynchronousSubmit
     public partial class SynchronousSubmit : CCSkinMain
     {
 
-       
-       // CircularProgressBar.CircularProgressBar cbar = new CircularProgressBar.CircularProgressBar();
+        private bool CanToClose = false;
+        private bool IsRunning = false;
+        // CircularProgressBar.CircularProgressBar cbar = new CircularProgressBar.CircularProgressBar();
 
 
 
         public SynchronousSubmit()
         {
             InitializeComponent();
+            //读取配置文件定时的时间间隔，配置文件的时间单位为分钟，要转化为毫秒
+            try
+            {
+                string interval = SystemHandler.restartTime;
+                this.timer1.Interval = int.Parse(interval) * 60 * 1000;
+            }
+            catch (Exception ex)
+            {
+                this.timer1.Interval = 3600000;
+                throw ex;
+            }
+
+
         }
 
 
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            if (!IsRunning) return;
+            timer1.Tick -= timer_Tick;
+            timer1.Enabled = false;
 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            backgroundWorker1.RunWorkerAsync();
         }
 
         private void TmiStart_Click(object sender, EventArgs e)
         {
-
+            this.IsRunning = true;
+            RefreshRoles();
+            timer1.Start();
             // 测试连接数据库
-            BizandrepManager bm = new BizandrepManager();
-            string sql = @"select * from bizandrep";
-            var result = bm.Query(sql);
+            //BizandrepManager bm = new BizandrepManager();
+            //string sql = @"select * from bizandrep";
+            //var result = bm.Query(sql);
 
 
             richTextBox1.AppendText("开启任务:" + DateTime.Now.ToString() + "\n");
-            //测试进度条
-            string path = SystemHandler.localBizFilePath;
-            UpdateCircleBar(100,path);
+           
 
 
-            //richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
-
-
+            timer_Tick(null, null);
 
 
         }
@@ -226,6 +245,41 @@ namespace AutoSynchronousSubmit
             return result;
         }
 
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            //测试进度条
+            string path = SystemHandler.localBizFilePath;
+            UpdateCircleBar(100,path);
+
+            //new Thread(() =>
+            //{
+
+            //        Action<int> action = (data) =>
+            //        {
+            //            this.richTextBox1.AppendText("我执行了:" + DateTime.Now.ToString() + "\n");
+            //        };
+            //        Invoke(action,1);
+
+            //}).Start();
+
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            richTextBox1.AppendText(e.UserState.ToString() + "\n");
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            backgroundWorker1.DoWork -= backgroundWorker1_DoWork;
+            backgroundWorker1.RunWorkerCompleted -= backgroundWorker1_RunWorkerCompleted;
+            backgroundWorker1.ProgressChanged -= backgroundWorker1_ProgressChanged;
+
+            timer1.Tick += timer_Tick;
+            timer1.Enabled = true;
+        }
+
         private void SynchronousSubmit_Load(object sender, EventArgs e)
         {
             //circularProgressBar1.Value = 0;
@@ -236,7 +290,23 @@ namespace AutoSynchronousSubmit
 
         private void TmiClose_Click(object sender, EventArgs e)
         {
+            CanToClose = true;
+            this.Close();
+        }
 
+        public void RefreshRoles()
+        {
+            this.tmiStart.Enabled = !this.IsRunning;
+            this.tmiStop.Enabled = this.IsRunning;
+
+        }
+
+        private void TmiStop_Click(object sender, EventArgs e)
+        {
+            this.IsRunning = false;
+            RefreshRoles();
+            timer1.Stop();
+            richTextBox1.AppendText("任务停止:" + DateTime.Now.ToString() + "\n");
         }
     }
 }

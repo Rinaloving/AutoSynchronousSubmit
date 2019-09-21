@@ -110,6 +110,7 @@
             this.tmiStop.Name = "tmiStop";
             this.tmiStop.Size = new System.Drawing.Size(71, 31);
             this.tmiStop.Text = "暂停";
+            this.tmiStop.Click += new System.EventHandler(this.TmiStop_Click);
             // 
             // tmiClose
             // 
