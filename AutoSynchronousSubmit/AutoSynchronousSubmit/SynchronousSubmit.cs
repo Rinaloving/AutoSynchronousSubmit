@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -41,54 +42,63 @@ namespace AutoSynchronousSubmit
 
         private void TmiStart_Click(object sender, EventArgs e)
         {
-            //测试进度条
-
-
-            UpdateCircleBar(100);
-
 
             // 测试连接数据库
-            //BizandrepManager bm = new BizandrepManager();
-            //string sql = @"select * from bizandrep";
-            //var result = bm.Query(sql);
+            BizandrepManager bm = new BizandrepManager();
+            string sql = @"select * from bizandrep";
+            var result = bm.Query(sql);
 
-            //string path = @"D:\dzxml\371425\BizMsg";
 
-            //string[] files = XMLHelper.GetBizFile(path);
+            richTextBox1.AppendText("开启任务:" + DateTime.Now.ToString() + "\n");
+            //测试进度条
+            string path = SystemHandler.localBizFilePath;
+            UpdateCircleBar(100,path);
 
-            //foreach (var file in files)
-            //{
-            //    List<dynamic> entities = GetSmtInstance(file);
-            //    string[] entityName = GetBizDataSonNodeName(file).ToArray();
-            //    int index = 0;
-            //    foreach (var entity in entities)
-            //    {            
-            //        EntityManager em = new EntityManager();
-            //        em.Insert(entityName[index], "PID", false, entity);
-            //        index++;
-            //    }
 
-            //}
-
+            //richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
 
 
 
 
         }
 
-        public  void  UpdateCircleBar(long lenth)
+        public void AnalysisBizFileToSubmit(string[] files)
         {
+            
 
+            foreach (var file in files)
+            {
+                List<dynamic> entities = GetSmtInstance(file);
+                string[] entityName = GetBizDataSonNodeName(file).ToArray();
+                int index = 0;
+                foreach (var entity in entities)
+                {
+                    EntityManager em = new EntityManager();
+                    em.Insert(entityName[index], "PID", false, entity);
+                    index++;
+                }
+
+            }
+        }
+
+        public  void  UpdateCircleBar(long lenth,string path)
+        {
+            string[] files = XMLHelper.GetBizFile(path);
             Thread thread = new Thread(new ThreadStart(new Action(delegate {
                 for (int i = 0; i <= lenth; i++)
                 {
                     Thread.Sleep(100);
 
-
+                    AnalysisBizFileToSubmit(files);
+                    //richTextBox1.AppendText("解析报文: " + Path.GetFileName(path) + " 完成！\n");
                     this.circleProgramBar1.Progress = i + 1;
+                    Action<int> action = (data) =>
+                    {
+                        this.richTextBox1.AppendText("解析报文: " + Path.GetFileName(files[i]) + " 完成！\n");
+                        
+                    };
 
-
-
+                    Invoke(action, i);
                 }
 
             })));
@@ -200,6 +210,10 @@ namespace AutoSynchronousSubmit
             {
                 result = Convert.ToDateTime(value);
             }
+            else if (fields[i].PropertyType.FullName == "System.Int32")
+            {
+                result = Convert.ToInt32(value);
+            }
             else
             {
                 result = value;
@@ -214,6 +228,11 @@ namespace AutoSynchronousSubmit
             //circularProgressBar1.Maximum = 100;
             //circularProgressBar1.Minimum = 0;
    
+        }
+
+        private void TmiClose_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

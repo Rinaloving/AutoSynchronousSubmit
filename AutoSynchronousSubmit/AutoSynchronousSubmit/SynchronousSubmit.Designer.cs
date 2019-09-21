@@ -117,6 +117,7 @@
             this.tmiClose.Name = "tmiClose";
             this.tmiClose.Size = new System.Drawing.Size(71, 31);
             this.tmiClose.Text = "退出";
+            this.tmiClose.Click += new System.EventHandler(this.TmiClose_Click);
             // 
             // skinTabControl1
             // 
@@ -124,6 +125,7 @@
             this.skinTabControl1.CloseRect = new System.Drawing.Rectangle(2, 2, 12, 12);
             this.skinTabControl1.Controls.Add(this.skinTabPage1);
             this.skinTabControl1.Controls.Add(this.skinTabPage2);
+            this.skinTabControl1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinTabControl1.HeadBack = null;
             this.skinTabControl1.ImgSize = new System.Drawing.Size(50, 50);
             this.skinTabControl1.ImgTxtOffset = new System.Drawing.Point(0, 0);
@@ -149,8 +151,10 @@
             this.skinTabPage1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("skinTabPage1.BackgroundImage")));
             this.skinTabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.skinTabPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.skinTabPage1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinTabPage1.Location = new System.Drawing.Point(0, 50);
             this.skinTabPage1.Name = "skinTabPage1";
+            this.skinTabPage1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.skinTabPage1.Size = new System.Drawing.Size(502, 311);
             this.skinTabPage1.TabIndex = 0;
             this.skinTabPage1.TabItemImage = ((System.Drawing.Image)(resources.GetObject("skinTabPage1.TabItemImage")));
@@ -161,6 +165,7 @@
             this.skinTabPage2.BackColor = System.Drawing.Color.White;
             this.skinTabPage2.Controls.Add(this.richTextBox1);
             this.skinTabPage2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.skinTabPage2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinTabPage2.Location = new System.Drawing.Point(0, 50);
             this.skinTabPage2.Name = "skinTabPage2";
             this.skinTabPage2.Size = new System.Drawing.Size(502, 311);
