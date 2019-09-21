@@ -131,6 +131,67 @@ namespace AutoSynchronousSubmit
 
         }
 
+        public void   BackUpBizFileUpdateCircleBar(long lenth, string p,int i,string localPath)
+        {
+
+            //string[] files = XMLHelper.GetBizFile(path);
+            Thread thread = new Thread(new ThreadStart(new Action( delegate {
+ 
+                    
+                  XMLHelper.BackupBizFile(p, localPath);
+
+                this.circleProgramBar1.Progress = i + 1;
+                    Action<int> action = (data) =>
+                    {
+                        this.richTextBox1.AppendText("备份报文: " + Path.GetFileName(p) + " 完成！\n");
+                        if (i == lenth)
+                        {
+                            this.richTextBox1.AppendText("完成备份任务:" + DateTime.Now.ToString() + "\n");
+                        }
+                    };
+
+                    Invoke(action, i);
+
+                
+
+            })));
+            thread.IsBackground = true;
+            thread.Start();
+
+
+        }
+
+        public void   GroupBizFileUpdateCircleBar(long lenth, string p, int i, string analysisPath )
+        {
+         
+            //string[] files = XMLHelper.GetBizFile(path);
+            Thread thread = new Thread(new ThreadStart(new Action( delegate {
+
+                
+                 XMLHelper.GroupByCreateDate(p, analysisPath); // 执行按日期分组
+
+                this.circleProgramBar1.Progress = i + 1;
+                Action<int> action = (data) =>
+                {
+                    this.richTextBox1.AppendText("分类报文: " + Path.GetFileName(p) + " 完成！\n");
+                    if (i == lenth)
+                    {
+                        this.richTextBox1.AppendText("完成分类任务:" + DateTime.Now.ToString() + "\n");
+                    }
+                };
+
+               Invoke(action, i);
+
+
+
+            })));
+            thread.IsBackground = true;
+            thread.Start();
+
+
+        }
+
+
         public List<string> GetBizDataSonNodeName(string file)
         {
             List<string> nodeNames = new List<string>();
@@ -245,12 +306,22 @@ namespace AutoSynchronousSubmit
             return result;
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private async void  backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
 
             //测试进度条
-            string path = SystemHandler.localBizFilePath;
-            UpdateCircleBar(100,path);
+
+            Task t = RunBackUpPrograme();
+
+            t.Wait();
+
+            t = RunAnalysisPrograme();
+
+            t.Wait();
+
+
+
+            //UpdateCircleBar(100,path);
 
             //new Thread(() =>
             //{
@@ -263,6 +334,44 @@ namespace AutoSynchronousSubmit
 
             //}).Start();
 
+        }
+
+        public async  Task RunBackUpPrograme()
+        {
+            await Task.Delay(50);
+            string path = SystemHandler.localBizFilePath;
+          
+           
+            //备份并执行按日期分组
+            List<string> filelist = Directory.GetFiles(path, "*.xml").ToList();// 获取所有报文
+            int i = 0;
+            filelist.ForEach( p => {
+
+                BackUpBizFileUpdateCircleBar(filelist.Count, p, i, path);
+                i++;
+            });
+
+
+            return;
+
+          
+
+        }
+
+        public async Task RunAnalysisPrograme()
+        {
+            await Task.Delay(50);
+            string path = SystemHandler.localBizFilePath;
+            string analysisPath = path + "/Analysis";
+            if (!Directory.Exists(analysisPath)) { Directory.CreateDirectory(analysisPath); }
+            List<string> analyfilelist = Directory.GetFiles(analysisPath, "*.xml").ToList();// 获取所有报文
+            int j = 0;
+            analyfilelist.ForEach(p => {
+                GroupBizFileUpdateCircleBar(analyfilelist.Count, p, j, analysisPath);
+                j++;
+            });
+
+            return;
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)

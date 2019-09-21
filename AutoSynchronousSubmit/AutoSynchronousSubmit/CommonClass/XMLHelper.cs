@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace AutoSynchronousSubmit.CommonClass
 {
+    
     public class XMLHelper
     {
         /// <summary>
@@ -50,11 +52,53 @@ namespace AutoSynchronousSubmit.CommonClass
         }
         
 
-        public static void BackupBizFile(string oldPath, string newPath)
+        public  static void BackupBizFile(string p,string localPath)
         {
 
+            string backupPath = localPath + "/BackUp"; // 本地报文备份到BackUp文件夹下
+            string analysisPath = localPath + "/Analysis"; // 解析报文路径
+            if (!Directory.Exists(backupPath)) { Directory.CreateDirectory(backupPath); }
+            if (!Directory.Exists(analysisPath)) { Directory.CreateDirectory(analysisPath); }
+
+           
+            File.Copy(p, backupPath+"/"+Path.GetFileName(p));
+            File.Copy(p, analysisPath + "/" + Path.GetFileName(p));
+            File.Delete(p);
+
+           
 
         }
+
+
+        public   static void GroupByCreateDate(string p,string localPath)
+        {
+
+                string createDate = GetBizXmlCreateDate(p).Substring(0, 10);
+                string newPath = localPath + "\\" + createDate;
+                if (!Directory.Exists(newPath)) { Directory.CreateDirectory(newPath); }
+                File.Move(p, newPath + "\\" + Path.GetFileName(p));
+                
+           
+        }
+
+        public static string GetBizXmlCreateDate(string xmlPath)
+        {
+            try
+            {
+                XElement root = XElement.Load(xmlPath);
+                //获取报文创建时间
+                string createdate = root.Element("Head").Element("CreateDate").Value;
+
+                return createdate;
+            }
+            catch (Exception ex)
+            {
+                return "无报文创建时间";
+                throw ex;
+            }
+        }
+
+       
 
     }
 }
