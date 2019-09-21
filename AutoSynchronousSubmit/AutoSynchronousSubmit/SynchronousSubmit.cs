@@ -43,7 +43,8 @@ namespace AutoSynchronousSubmit
         {
             //测试进度条
 
-            UpdateCircleBar();
+
+            UpdateCircleBar(100);
 
 
             // 测试连接数据库
@@ -75,19 +76,26 @@ namespace AutoSynchronousSubmit
 
         }
 
-        public  void  UpdateCircleBar()
+        public  void  UpdateCircleBar(long lenth)
         {
-            for (int i = 0; i <= 100; i++)
-            {
 
-                circularProgressBar1.Value = i;
-                circularProgressBar1.Update();
+            Thread thread = new Thread(new ThreadStart(new Action(delegate {
+                for (int i = 0; i <= lenth; i++)
+                {
+                    Thread.Sleep(100);
 
-                circularProgressBar1.Text = i.ToString() + "%";
-                Application.DoEvents();
-                Thread.Sleep(100);
 
-            }
+                    this.circleProgramBar1.Progress = i + 1;
+
+
+
+                }
+
+            })));
+            thread.IsBackground = true;
+            thread.Start();
+
+
         }
 
         public List<string> GetBizDataSonNodeName(string file)
@@ -202,7 +210,7 @@ namespace AutoSynchronousSubmit
 
         private void SynchronousSubmit_Load(object sender, EventArgs e)
         {
-            circularProgressBar1.Value = 0;
+            //circularProgressBar1.Value = 0;
             //circularProgressBar1.Maximum = 100;
             //circularProgressBar1.Minimum = 0;
    
