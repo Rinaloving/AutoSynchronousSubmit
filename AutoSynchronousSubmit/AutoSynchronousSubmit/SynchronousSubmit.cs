@@ -25,6 +25,7 @@ namespace AutoSynchronousSubmit
 
         private bool CanToClose = false;
         private bool IsRunning = false;
+        private DateTime startDate = Convert.ToDateTime(SystemHandler.startDate);
         // CircularProgressBar.CircularProgressBar cbar = new CircularProgressBar.CircularProgressBar();
 
 
@@ -100,21 +101,24 @@ namespace AutoSynchronousSubmit
             }
         }
 
-        public  void  UpdateCircleBar(long lenth,string path)
+        public  void  UpdateCircleBar(string path)
         {
             string[] files = XMLHelper.GetBizFile(path);
+            int length = files.Length;
+            double num = 0d;
             Thread thread = new Thread(new ThreadStart(new Action(delegate {
-                for (int i = 0; i <= lenth; i++)
+                for (int i = 0; i < length; i++)
                 {
-                    Thread.Sleep(100);
-
+                    Thread.Sleep(10);
+                    this.circleProgramBar1.MaxValue = 100;
+                    num = (((double)i / length) * 100);
                     AnalysisBizFileToSubmit(files);
                     
-                    this.circleProgramBar1.Progress = i + 1;
+                    this.circleProgramBar1.Progress = (int)num + 1;
                     Action<int> action = (data) =>
                     {
                         this.richTextBox1.AppendText("解析报文: " + Path.GetFileName(files[i]) + " 完成！\n");
-                        if (i == lenth)
+                        if (i == (length-1))
                         {
                             this.richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
                         }
@@ -327,6 +331,10 @@ namespace AutoSynchronousSubmit
 
             t.Wait();
 
+            t = RunSynchrousSubmitPrograme();
+
+            t.Wait();
+
 
 
             //UpdateCircleBar(100,path);
@@ -343,7 +351,32 @@ namespace AutoSynchronousSubmit
             //}).Start();
 
         }
+        
+        public async Task RunSynchrousSubmitPrograme()
+        {
+            await Task.Delay(50);
+            string localPath = SystemHandler.localBizFilePath;
+            string synfilePath = localPath + "/Analysis/" + startDate.ToString("yyyy-MM-dd");
+            if (Directory.Exists(synfilePath))
+            {
+               
+                UpdateCircleBar(synfilePath);
+            }
+            if (DateTime.Compare(startDate,System.DateTime.Now) < 0)
+            {
+                startDate = startDate.AddDays(1);
+            }
+            else
+            {
+                startDate = System.DateTime.Now;
+            }
+            
 
+        }
+        /// <summary>
+        /// 报文备份
+        /// </summary>
+        /// <returns></returns>
         public async  Task RunBackUpPrograme()
         {
             await Task.Delay(50);
@@ -367,7 +400,10 @@ namespace AutoSynchronousSubmit
           
 
         }
-
+        /// <summary>
+        /// 按日期分类报文
+        /// </summary>
+        /// <returns></returns>
         public async Task RunAnalysisPrograme()
         {
             await Task.Delay(50);

@@ -20,5 +20,8 @@ namespace AutoSynchronousSubmit.CommonClass
         public  static readonly string restartTime = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).AppSettings.Settings["Interval"].Value;
 
 
+        public static readonly string startDate  = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).AppSettings.Settings["StartDate"].Value;
+
+
     }
 }
