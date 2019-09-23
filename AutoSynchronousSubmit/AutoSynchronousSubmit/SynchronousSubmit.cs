@@ -107,20 +107,25 @@ namespace AutoSynchronousSubmit
             int length = files.Length;
             double num = 0d;
             Thread thread = new Thread(new ThreadStart(new Action(delegate {
-                for (int i = 0; i < length; i++)
+                for (int i = 0; i <=length; i++)
                 {
                     Thread.Sleep(10);
                     this.circleProgramBar1.MaxValue = 100;
-                    num = (((double)i / length) * 100);
+                    num = (((double)i /length) * 100);
                     AnalysisBizFileToSubmit(files);
                     
                     this.circleProgramBar1.Progress = (int)num + 1;
                     Action<int> action = (data) =>
                     {
-                        this.richTextBox1.AppendText("解析报文: " + Path.GetFileName(files[i]) + " 完成！\n");
-                        if (i == (length-1))
+                        
+                        if (i != length)
+                        {
+                            this.richTextBox1.AppendText("解析报文: " + Path.GetFileName(files[i]) + " 完成！\n");
+                        }
+                        else 
                         {
                             this.richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
+                            this.circleProgramBar1.Progress = 100;
                         }
                     };
 
@@ -344,7 +349,7 @@ namespace AutoSynchronousSubmit
 
         private async void  backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-
+           
             //测试进度条
 
             Task t = RunBackUpPrograme();
@@ -361,16 +366,16 @@ namespace AutoSynchronousSubmit
 
 
 
-            //UpdateCircleBar(100,path);
+            //UpdateCircleBar(100, path);
 
             //new Thread(() =>
             //{
 
-            //        Action<int> action = (data) =>
-            //        {
-            //            this.richTextBox1.AppendText("我执行了:" + DateTime.Now.ToString() + "\n");
-            //        };
-            //        Invoke(action,1);
+            //    Action<int> action = (data) =>
+            //    {
+            //        this.richTextBox1.AppendText("我执行了:" + DateTime.Now.ToString() + "\n");
+            //    };
+            //    Invoke(action, 1);
 
             //}).Start();
 
