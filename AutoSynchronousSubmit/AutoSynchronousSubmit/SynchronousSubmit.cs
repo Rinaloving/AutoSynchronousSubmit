@@ -107,7 +107,7 @@ namespace AutoSynchronousSubmit
             int length = files.Length;
             double num = 0d;
             Thread thread = new Thread(new ThreadStart(new Action(delegate {
-                for (int i = 0; i <=length; i++)
+                for (int i = 0; i <length; i++)
                 {
                     Thread.Sleep(10);
                     this.circleProgramBar1.MaxValue = 100;
@@ -118,11 +118,11 @@ namespace AutoSynchronousSubmit
                     Action<int> action = (data) =>
                     {
                         
-                        if (i != length)
+                        if (length-i>0)
                         {
                             this.richTextBox1.AppendText("解析报文: " + Path.GetFileName(files[i]) + " 完成！\n");
                         }
-                        else 
+                         if(length-i<=1)
                         {
                             this.richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
                             this.circleProgramBar1.Progress = 100;
