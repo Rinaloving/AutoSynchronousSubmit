@@ -203,7 +203,7 @@ namespace AutoSynchronousSubmit
 
         }
 
-
+        
         public List<string> GetBizDataSonNodeName(string file)
         {
             List<string> nodeNames = new List<string>();
@@ -215,17 +215,39 @@ namespace AutoSynchronousSubmit
             }
             return nodeNames;
         }
+        /// <summary>
+        /// RNANDCN插入一条数据
+        /// </summary>
+        /// <param name="pid"></param>
+        /// <param name="rnandcn"></param>
+        /// <param name="head"></param>
+        public void InsertRNANDCN(string pid,RNANDCN rnandcn, Head head)
+        {
+            RnandcnManager rm = new RnandcnManager();
+            rnandcn.PID = pid;
+            rnandcn.REALEUNUM = head.EstateNum;
+            rnandcn.YWH = head.RecFlowID;
+            rnandcn.JRYWBM = head.RecType;
+            rnandcn.QXDM = head.AreaCode;
+            rnandcn.CREATETIME = head.CreateDate;
+            
+            rm.Insert("RNANDCN", "PID", false, rnandcn);
+        }
 
         public List<dynamic> GetSmtInstance(string file)
         {
-            List<dynamic> lst = new List<dynamic>();
-          
-          
+                List<dynamic> lst = new List<dynamic>();
+                string pid = Guid.NewGuid().ToString();
+                
+
                 Head head = XMLHelper.GetBizHeadInfo(file);
-                IEnumerable<XNode> val = XElement.Load(file).Element("Data").Nodes(); // 获取子节点值
+                RNANDCN rnandcn = new RNANDCN();
+                InsertRNANDCN(pid,rnandcn,head);
+
+            IEnumerable<XNode> val = XElement.Load(file).Element("Data").Nodes(); // 获取子节点值
                 foreach (XNode it in val)
                 {
-                    XElement val2 = (XElement)it; // 获取子节点值
+                    XElement val2 = (XElement)it; // 获取子节点值 RNANDCN
                     var currentNodeName = val2.Name; // 当前节点名
                     IEnumerable<XAttribute> m = val2.Attributes();
 
@@ -308,7 +330,9 @@ namespace AutoSynchronousSubmit
             }
             else if (fields[i].PropertyType.FullName == "System.Int32")
             {
-                result = Convert.ToInt32(value);
+                string str = System.Text.RegularExpressions.Regex.Replace(value.ToString(), @"[^0-9]+", "");
+   
+                result = Convert.ToInt32(str == "" ? "0" : str);
             }
             else
             {
