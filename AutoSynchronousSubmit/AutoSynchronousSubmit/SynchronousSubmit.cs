@@ -497,5 +497,25 @@ namespace AutoSynchronousSubmit
             timer1.Stop();
             richTextBox1.AppendText("任务停止:" + DateTime.Now.ToString() + "\n");
         }
+
+        private void NotifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+        }
+
+        private void 显示ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Visible = true;
+        }
+
+        private void 隐藏ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Visible = false;
+        }
+
+        private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

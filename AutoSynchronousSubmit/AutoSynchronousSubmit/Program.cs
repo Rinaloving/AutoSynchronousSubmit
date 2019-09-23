@@ -14,9 +14,21 @@ namespace AutoSynchronousSubmit
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SynchronousSubmit());
+            bool runone;
+
+            System.Threading.Mutex run = new System.Threading.Mutex(true,"single",out runone);
+            if (runone)
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new SynchronousSubmit());
+            }
+            else
+            {
+                MessageBox.Show("已经运行了一个实例。");
+            }
+
+           
         }
     }
 }

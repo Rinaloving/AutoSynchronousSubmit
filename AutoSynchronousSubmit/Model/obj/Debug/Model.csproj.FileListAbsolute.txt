@@ -12,4 +12,3 @@ D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model.csproj.CopyComplete
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model.dll
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model.pdb
-D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\Model\obj\Debug\Model.csprojAssemblyReference.cache
