@@ -146,6 +146,14 @@ namespace AutoSynchronousSubmit
                         {
                             this.richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
                             this.circleProgramBar1.Progress = 100;
+                            if (DateTime.Compare(startDate, System.DateTime.Now) < 0)
+                            {
+                                startDate = startDate.AddDays(1);
+                            }
+                            else
+                            {
+                                startDate = System.DateTime.Now;
+                            }
                             IsRunning = true;
                         }
                     };
@@ -417,14 +425,7 @@ namespace AutoSynchronousSubmit
                
                 UpdateCircleBar(synfilePath);
             }
-            if (DateTime.Compare(startDate,System.DateTime.Now) < 0)
-            {
-                startDate = startDate.AddDays(1);
-            }
-            else
-            {
-                startDate = System.DateTime.Now;
-            }
+            
             
 
         }
