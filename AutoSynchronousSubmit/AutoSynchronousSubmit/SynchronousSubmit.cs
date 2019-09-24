@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -25,8 +26,12 @@ namespace AutoSynchronousSubmit
 
         private bool CanToClose = false;
         private bool IsRunning = false;
+      
         private DateTime startDate = Convert.ToDateTime(SystemHandler.startDate);
         // CircularProgressBar.CircularProgressBar cbar = new CircularProgressBar.CircularProgressBar();
+
+
+
 
 
 
@@ -56,10 +61,25 @@ namespace AutoSynchronousSubmit
             timer1.Tick -= timer_Tick;
             timer1.Enabled = false;
 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-            backgroundWorker1.RunWorkerAsync();
+            if (!IsRunning)
+            {
+                return;
+            }
+            try
+            {
+                IsRunning = false;
+                this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+                this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+                this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+                backgroundWorker1.RunWorkerAsync();
+            }
+            catch (Exception ex) { }
+            finally
+            {
+                IsRunning = false;
+            }
+
+           
         }
 
         private void TmiStart_Click(object sender, EventArgs e)
@@ -126,6 +146,7 @@ namespace AutoSynchronousSubmit
                         {
                             this.richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
                             this.circleProgramBar1.Progress = 100;
+                            IsRunning = true;
                         }
                     };
 
@@ -349,7 +370,10 @@ namespace AutoSynchronousSubmit
 
         private async void  backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-           
+
+
+
+
             //测试进度条
 
             Task t = RunBackUpPrograme();
@@ -364,6 +388,8 @@ namespace AutoSynchronousSubmit
 
             t.Wait();
 
+
+            
 
 
             //UpdateCircleBar(100, path);
@@ -433,7 +459,7 @@ namespace AutoSynchronousSubmit
         /// 按日期分类报文
         /// </summary>
         /// <returns></returns>
-        public async Task RunAnalysisPrograme()
+        public  async Task  RunAnalysisPrograme()
         {
             await Task.Delay(50);
             string path = SystemHandler.localBizFilePath;
@@ -451,7 +477,7 @@ namespace AutoSynchronousSubmit
                 j++;
             });
 
-            return;
+            return ;
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -517,5 +543,9 @@ namespace AutoSynchronousSubmit
         {
             Application.Exit();
         }
+
+
+        
+        
     }
 }
