@@ -61,8 +61,8 @@ namespace AutoSynchronousSubmit.CommonClass
             if (!Directory.Exists(analysisPath)) { Directory.CreateDirectory(analysisPath); }
 
            
-            File.Copy(p, backupPath+"/"+Path.GetFileName(p));
-            File.Copy(p, analysisPath + "/" + Path.GetFileName(p));
+            File.Copy(p, backupPath+"/"+Path.GetFileName(p),true);
+            File.Copy(p, analysisPath + "/" + Path.GetFileName(p), true);
             File.Delete(p);
 
            

@@ -169,25 +169,31 @@ namespace AutoSynchronousSubmit
 
         }
 
-        public void   BackUpBizFileUpdateCircleBar(double lenth, string p,double i,string localPath)
+        public void   BackUpBizFileUpdateCircleBar(int lenth, string p,int i,string localPath)
         {
 
+            double num = (((double)i / lenth) * 100);
             //string[] files = XMLHelper.GetBizFile(path);
             Thread thread = new Thread(new ThreadStart(new Action( delegate {
  
                     
                   XMLHelper.BackupBizFile(p, localPath);
   
-                  this.circleProgramBar1.MaxValue = (int)lenth;
+                  this.circleProgramBar1.MaxValue = 100;
         
 
-                  this.circleProgramBar1.Progress = (int)i+1;
+                  this.circleProgramBar1.Progress = (int)num + 1;
                     Action<int> action = (data) =>
                     {
-                        this.richTextBox1.AppendText("备份报文: " + Path.GetFileName(p) + " 完成！\n");
-                        if (i == lenth)
+                        if (lenth - i > 0)
+                        {
+                            this.richTextBox1.AppendText("备份报文: " + Path.GetFileName(p) + " 完成！\n");
+                        }
+                        
+                        if (lenth - i <= 1)
                         {
                             this.richTextBox1.AppendText("完成备份任务:" + DateTime.Now.ToString() + "\n");
+                            this.circleProgramBar1.Progress = 100;
                         }
                     };
 
@@ -202,31 +208,37 @@ namespace AutoSynchronousSubmit
 
         }
 
-        public void   GroupBizFileUpdateCircleBar(double lenth, string p, double i, string analysisPath )
+        public void   GroupBizFileUpdateCircleBar(int lenth, string p, int j, string analysisPath )
         {
-         
+            double num = (((double)j / lenth) * 100);
             //string[] files = XMLHelper.GetBizFile(path);
             Thread thread = new Thread(new ThreadStart(new Action( delegate {
 
                 
                  XMLHelper.GroupByCreateDate(p, analysisPath); // 执行按日期分组
                 
-                this.circleProgramBar1.MaxValue = (int)lenth;
+                this.circleProgramBar1.MaxValue = 100;
 
                
 
-                this.circleProgramBar1.Progress = (int)i + 1;
+                this.circleProgramBar1.Progress = (int)num + 1;
 
                 Action<int> action = (data) =>
                 {
-                    this.richTextBox1.AppendText("分类报文: " + Path.GetFileName(p) + " 完成！\n");
-                    if (i == lenth)
+                    if (lenth - j > 0)
+                    {
+                        this.richTextBox1.AppendText("分类报文: " + Path.GetFileName(p) + " 完成！\n");
+                    }
+
+                    
+                    if (lenth - j <= 1)
                     {
                         this.richTextBox1.AppendText("完成分类任务:" + DateTime.Now.ToString() + "\n");
+                        this.circleProgramBar1.Progress = 100;
                     }
                 };
 
-               Invoke(action, (int)i);
+               Invoke(action, (int)j);
 
 
 
@@ -397,7 +409,7 @@ namespace AutoSynchronousSubmit
             t.Wait();
 
 
-            
+
 
 
             //UpdateCircleBar(100, path);
@@ -445,8 +457,8 @@ namespace AutoSynchronousSubmit
             int totalnum = filelist.Count;
             filelist.ForEach( p => {
                 Thread.Sleep(50);
-                double num = (((double)i / totalnum) * 100);
-                BackUpBizFileUpdateCircleBar(100, p, num, path);
+                
+                BackUpBizFileUpdateCircleBar(totalnum, p, i, path);
                 i++;
             });
 
@@ -473,8 +485,8 @@ namespace AutoSynchronousSubmit
 
             analyfilelist.ForEach(p => {
                 Thread.Sleep(50);
-                double num = (((double)j / totalnum) * 100);
-                GroupBizFileUpdateCircleBar(100, p, num, analysisPath);
+               
+                GroupBizFileUpdateCircleBar(totalnum, p, j, analysisPath);
                 j++;
             });
 

@@ -16,7 +16,7 @@ namespace AutoSynchronousSubmit
         {
             bool runone;
 
-            System.Threading.Mutex run = new System.Threading.Mutex(true,"single",out runone);
+            System.Threading.Mutex run = new System.Threading.Mutex(true,"monitor",out runone);
             if (runone)
             {
                 Application.EnableVisualStyles();
