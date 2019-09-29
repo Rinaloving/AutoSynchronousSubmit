@@ -102,13 +102,16 @@ namespace AutoSynchronousSubmit
 
         }
 
-        public void AnalysisBizFileToSubmit(string[] files)
+        public void AnalysisBizFileToSubmit(string file)
         {
-            
 
-            foreach (var file in files)
-            {
-                List<dynamic> entities = GetSmtInstance(file);
+           
+
+           
+                Head head = XMLHelper.GetBizHeadInfo(file);
+                RNANDCN rnandcn = new RNANDCN();
+                InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head);
+                List<dynamic> entities = GetSmtInstance(file,head);
                 string[] entityName = GetBizDataSonNodeName(file).ToArray();
                 int index = 0;
                 foreach (var entity in entities)
@@ -118,7 +121,7 @@ namespace AutoSynchronousSubmit
                     index++;
                 }
 
-            }
+            
         }
 
         public  void  UpdateCircleBar(string path)
@@ -132,7 +135,7 @@ namespace AutoSynchronousSubmit
                     Thread.Sleep(10);
                     this.circleProgramBar1.MaxValue = 100;
                     num = (((double)i /length) * 100);
-                    AnalysisBizFileToSubmit(files);
+                    AnalysisBizFileToSubmit(files[i]);
                     
                     this.circleProgramBar1.Progress = (int)num + 1;
                     Action<int> action = (data) =>
@@ -280,15 +283,10 @@ namespace AutoSynchronousSubmit
             rm.Insert("RNANDCN", "PID", false, rnandcn);
         }
 
-        public List<dynamic> GetSmtInstance(string file)
+        public List<dynamic> GetSmtInstance(string file,Head head)
         {
                 List<dynamic> lst = new List<dynamic>();
-                string pid = Guid.NewGuid().ToString();
                 
-
-                Head head = XMLHelper.GetBizHeadInfo(file);
-                RNANDCN rnandcn = new RNANDCN();
-                InsertRNANDCN(pid,rnandcn,head);
 
             IEnumerable<XNode> val = XElement.Load(file).Element("Data").Nodes(); // 获取子节点值
                 foreach (XNode it in val)
@@ -436,6 +434,18 @@ namespace AutoSynchronousSubmit
             {
                
                 UpdateCircleBar(synfilePath);
+            }
+            else
+            {
+                if (DateTime.Compare(startDate, System.DateTime.Now) < 0)
+                {
+                    startDate = startDate.AddDays(1);
+                }
+                else
+                {
+                    startDate = System.DateTime.Now;
+                }
+                IsRunning = true;
             }
             
             
