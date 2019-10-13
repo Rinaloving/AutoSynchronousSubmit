@@ -362,14 +362,16 @@ namespace AutoSynchronousSubmit
             }
             else if (fields[i].PropertyType.FullName == "System.Byte")
             {
-                result = Convert.ToByte(value);
+                result = Convert.ToByte(Convert.ToDouble(value)); // 防止报文中有double类型
             }
             else if (fields[i].PropertyType.FullName == "System.Decimal")
             {
-                result = Convert.ToDecimal(value);
+                string str = System.Text.RegularExpressions.Regex.Replace(value.ToString(), @"[^0-9]+", "");
+                result = Convert.ToDecimal(str);
             }
             else if (fields[i].PropertyType.FullName == "System.DateTime")
             {
+
                 result = Convert.ToDateTime(value);
             }
             else if (fields[i].PropertyType.FullName == "System.Int32")
