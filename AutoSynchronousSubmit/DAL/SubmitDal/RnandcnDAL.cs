@@ -14,6 +14,10 @@ namespace DAL.SubmitDal
             return context.Insert(tablename, pkey, b, endtity);
         }
 
+        public new ICollection<RNANDCN> Query(string sql)
+        {
+            return context.Fetch<RNANDCN>(sql);
+        }
 
     }
 }

@@ -110,18 +110,26 @@ namespace AutoSynchronousSubmit
            
                 Head head = XMLHelper.GetBizHeadInfo(file);
                 RNANDCN rnandcn = new RNANDCN();
-                InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head);
-                List<dynamic> entities = GetSmtInstance(file,head);
-                string[] entityName = GetBizDataSonNodeName(file).ToArray();
-                int index = 0;
-                foreach (var entity in entities)
+                RnandcnManager rm = new RnandcnManager();
+                string today = head.CreateDate.ToString("yyyyMMdd");
+                //string today2 = "20191018";
+                ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '"+head.PreEstateNum+"' and to_char(createtime,'yyyyMMdd') = '"+ today + "' ");
+                if (list.Count==0)
                 {
-                    EntityManager em = new EntityManager();
-                    em.Insert(entityName[index], "PID", false, entity);
-                    index++;
-                }
+                    InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head);
+                    List<dynamic> entities = GetSmtInstance(file, head);
+                    string[] entityName = GetBizDataSonNodeName(file).ToArray();
+                    int index = 0;
+                    foreach (var entity in entities)
+                    {
+                        EntityManager em = new EntityManager();
+                        em.Insert(entityName[index], "PID", false, entity);
+                        index++;
+                    }
 
-            
+                }
+ 
+
         }
 
         public  void  UpdateCircleBar(string path)
@@ -371,8 +379,15 @@ namespace AutoSynchronousSubmit
             }
             else if (fields[i].PropertyType.FullName == "System.DateTime")
             {
-
-                result = Convert.ToDateTime(value);
+                if (Convert.ToString(value).Length==4)
+                {
+                    result = new DateTime().AddYears(Convert.ToInt32((value)) - 1);
+                }
+                else
+                {
+                    result = Convert.ToDateTime(value);
+                }
+               
             }
             else if (fields[i].PropertyType.FullName == "System.Int32")
             {

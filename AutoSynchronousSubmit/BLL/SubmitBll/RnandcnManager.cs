@@ -1,4 +1,5 @@
 ﻿using DAL.SubmitDal;
+using Model.SubmitModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,9 @@ namespace BLL.SubmitBll
             return ety.Insert(entityName, pkey, b, endtity);
         }
 
+        public  ICollection<RNANDCN> Query(string sql)
+        {
+            return ety.Query(sql);
+        }
     }
 }
