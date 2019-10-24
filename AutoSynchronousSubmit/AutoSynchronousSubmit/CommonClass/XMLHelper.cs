@@ -76,7 +76,9 @@ namespace AutoSynchronousSubmit.CommonClass
                 string createDate = GetBizXmlCreateDate(p).Substring(0, 10);
                 string newPath = localPath + "\\" + createDate;
                 if (!Directory.Exists(newPath)) { Directory.CreateDirectory(newPath); }
-                File.Move(p, newPath + "\\" + Path.GetFileName(p));
+                //File.Move(p, newPath + "\\" + Path.GetFileName(p));
+                File.Copy(p, newPath + "\\" + Path.GetFileName(p),true);
+                File.Delete(p);
                 
            
         }

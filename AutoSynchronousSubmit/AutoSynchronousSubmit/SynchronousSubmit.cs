@@ -374,7 +374,8 @@ namespace AutoSynchronousSubmit
             }
             else if (fields[i].PropertyType.FullName == "System.Decimal")
             {
-                string str = System.Text.RegularExpressions.Regex.Replace(value.ToString(), @"[^0-9]+", "");
+                //string str = System.Text.RegularExpressions.Regex.Replace(value.ToString(), @"[^0-9]+", ""); //只保留数字
+                string str = System.Text.RegularExpressions.Regex.Replace(value.ToString(), @"[^0-9\.]+", ""); // 只保留数字和小数点
                 result = Convert.ToDecimal(str);
             }
             else if (fields[i].PropertyType.FullName == "System.DateTime")

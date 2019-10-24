@@ -10,6 +10,8 @@ namespace DAL.SubmitDal
     {
         public new object Insert(string entityName, string pkey, bool b, dynamic endtity)
         {
+
+
             return context.Insert(entityName, pkey, b, endtity);
         }
 
