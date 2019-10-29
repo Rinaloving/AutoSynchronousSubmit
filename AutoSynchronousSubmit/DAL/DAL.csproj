@@ -59,6 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubmitDal\BizandrepDAL.cs" />
     <Compile Include="SubmitDal\EntityDAL.cs" />
+    <Compile Include="SubmitDal\MsgtimerecordDAL.cs" />
     <Compile Include="SubmitDal\RnandcnDAL.cs" />
   </ItemGroup>
   <ItemGroup>

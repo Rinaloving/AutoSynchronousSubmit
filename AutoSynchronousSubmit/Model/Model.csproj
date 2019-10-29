@@ -74,6 +74,7 @@
     <Compile Include="SubmitModel\KTT_GZW.cs" />
     <Compile Include="SubmitModel\KTT_ZDJBXX.cs" />
     <Compile Include="SubmitModel\KTT_ZHJBXX.cs" />
+    <Compile Include="SubmitModel\MSGTIMERECORD.cs" />
     <Compile Include="SubmitModel\QLF_FW_FDCQ_DZ_XM.cs" />
     <Compile Include="SubmitModel\QLF_FW_FDCQ_QFSYQ.cs" />
     <Compile Include="SubmitModel\QLF_QL_CFDJ.cs" />

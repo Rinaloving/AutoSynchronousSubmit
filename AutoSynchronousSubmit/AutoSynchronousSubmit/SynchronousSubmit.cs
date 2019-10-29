@@ -105,19 +105,24 @@ namespace AutoSynchronousSubmit
         public void AnalysisBizFileToSubmit(string file)
         {
 
-           
+
+                DateTime? createtime = null; // 创建时间
+                DateTime? djsj = null; // 登记时间
+                DateTime? slsj = null; // 受理时间
+                
 
            
                 Head head = XMLHelper.GetBizHeadInfo(file);
                 RNANDCN rnandcn = new RNANDCN();
+                MSGTIMERECORD mtd = new MSGTIMERECORD();
                 RnandcnManager rm = new RnandcnManager();
                 string today = head.CreateDate.ToString("yyyyMMdd");
                 //string today2 = "20191018";
                 ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '"+head.PreEstateNum+"' and to_char(createtime,'yyyyMMdd') = '"+ today + "' ");
                 if (list.Count==0)
                 {
-                    InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head);
-                    List<dynamic> entities = GetSmtInstance(file, head);
+                    InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head, ref createtime);
+                    List<dynamic> entities = GetSmtInstance(file, head,ref djsj,ref slsj);
                     string[] entityName = GetBizDataSonNodeName(file).ToArray();
                     int index = 0;
                     foreach (var entity in entities)
@@ -126,7 +131,9 @@ namespace AutoSynchronousSubmit
                         em.Insert(entityName[index], "PID", false, entity);
                         index++;
                     }
-
+                    mtd.DJSJ = djsj;
+                    mtd.SLSJ = slsj;
+                    InsertMSGTIMERECORD(Guid.NewGuid().ToString(), mtd, head);
                 }
  
 
@@ -278,7 +285,7 @@ namespace AutoSynchronousSubmit
         /// <param name="pid"></param>
         /// <param name="rnandcn"></param>
         /// <param name="head"></param>
-        public void InsertRNANDCN(string pid,RNANDCN rnandcn, Head head)
+        public void InsertRNANDCN(string pid,RNANDCN rnandcn, Head head, ref DateTime? createtime)
         {
             RnandcnManager rm = new RnandcnManager();
             rnandcn.PID = pid;
@@ -287,11 +294,24 @@ namespace AutoSynchronousSubmit
             rnandcn.JRYWBM = head.RecType;
             rnandcn.QXDM = head.AreaCode;
             rnandcn.CREATETIME = head.CreateDate;
-            
+            createtime = head.CreateDate;
+
+
             rm.Insert("RNANDCN", "PID", false, rnandcn);
         }
 
-        public List<dynamic> GetSmtInstance(string file,Head head)
+        public void InsertMSGTIMERECORD(string pid, MSGTIMERECORD mtd, Head head)
+        {
+            MsgtimerecordManager mmr = new MsgtimerecordManager();
+            mtd.PID = pid;
+            mtd.BDCDYH = head.EstateNum;
+            mtd.QXDM = head.AreaCode;
+            mtd.CREATETIME = head.CreateDate;
+            mmr.Insert("MSGTIMERECORD","PID",false,mtd);
+
+        }
+
+        public List<dynamic> GetSmtInstance(string file,Head head, ref DateTime? djsj, ref DateTime? slsj)
         {
                 List<dynamic> lst = new List<dynamic>();
                 
@@ -341,9 +361,17 @@ namespace AutoSynchronousSubmit
                         else if (fields[i].Name.ToString() == "CREATETIME")
                         {
                             fields[i].SetValue(entity, ConvertValueType(fields, head.CreateDate, i)); // 赋值
-                        }
+                        }else if (fields[i].Name.ToString() == "DJSJ")
+                        {
+                            djsj = entity.DJSJ ; // 赋值
                          
-                    }
+                        }
+                        else if (fields[i].Name.ToString() == "SLSJ")
+                        {
+                            slsj = entity.SLSJ;
+                        }
+
+                }
 
 
                     lst.Add(entity);
