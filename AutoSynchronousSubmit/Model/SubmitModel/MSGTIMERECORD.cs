@@ -28,7 +28,12 @@ namespace Model.SubmitModel
 
         [Column("CREATETIME")]
         public DateTime? CREATETIME { get; set; }
-
+        [Column("ZXSJ")]
+        public DateTime? ZXSJ { get; set; }
+        [Column("QLLX")]
+        public string QLLX { get; set; }
+        [Column("YWLX")]
+        public string YWLX { get; set; }
 
     }
 }

@@ -109,6 +109,7 @@ namespace AutoSynchronousSubmit
                 DateTime? createtime = null; // 创建时间
                 DateTime? djsj = null; // 登记时间
                 DateTime? slsj = null; // 受理时间
+                DateTime? zxsj = null; // 注销时间
                 
 
            
@@ -122,7 +123,7 @@ namespace AutoSynchronousSubmit
                 if (list.Count==0)
                 {
                     InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head, ref createtime);
-                    List<dynamic> entities = GetSmtInstance(file, head,ref djsj,ref slsj);
+                    List<dynamic> entities = GetSmtInstance(file, head,ref djsj,ref slsj,ref zxsj);
                     string[] entityName = GetBizDataSonNodeName(file).ToArray();
                     int index = 0;
                     foreach (var entity in entities)
@@ -133,6 +134,7 @@ namespace AutoSynchronousSubmit
                     }
                     mtd.DJSJ = djsj;
                     mtd.SLSJ = slsj;
+                    mtd.ZXSJ = zxsj;
                     InsertMSGTIMERECORD(Guid.NewGuid().ToString(), mtd, head);
                 }
  
@@ -307,11 +309,13 @@ namespace AutoSynchronousSubmit
             mtd.BDCDYH = head.EstateNum;
             mtd.QXDM = head.AreaCode;
             mtd.CREATETIME = head.CreateDate;
+            mtd.QLLX = head.RightType; // 权利类型
+            mtd.YWLX = head.RecType; // 业务类型
             mmr.Insert("MSGTIMERECORD","PID",false,mtd);
 
         }
 
-        public List<dynamic> GetSmtInstance(string file,Head head, ref DateTime? djsj, ref DateTime? slsj)
+        public List<dynamic> GetSmtInstance(string file,Head head, ref DateTime? djsj, ref DateTime? slsj, ref DateTime? zxsj)
         {
                 List<dynamic> lst = new List<dynamic>();
                 
@@ -369,6 +373,17 @@ namespace AutoSynchronousSubmit
                         else if (fields[i].Name.ToString() == "SLSJ")
                         {
                             slsj = entity.SLSJ;
+                        }else if (fields[i].Name.ToString() == "ZXSJ")
+                        {
+                            zxsj = entity.ZXSJ;
+                        }
+                        else if (fields[i].Name.ToString() == "QLLX")
+                        {
+                            fields[i].SetValue(entity, ConvertValueType(fields, head.RightType, i)); // 赋值
+                        }
+                        else if (fields[i].Name.ToString() == "YWLX")
+                        {
+                            fields[i].SetValue(entity, ConvertValueType(fields, head.RecType, i)); // 赋值
                         }
 
                 }
