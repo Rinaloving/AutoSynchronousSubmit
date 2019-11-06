@@ -34,6 +34,10 @@ namespace Model.SubmitModel
         public string QLLX { get; set; }
         [Column("YWLX")]
         public string YWLX { get; set; }
+        [Column("DJLX")]
+        public string DJLX { get; set; }
+        [Column("YWH")]
+        public string YWH { get; set; }
 
     }
 }

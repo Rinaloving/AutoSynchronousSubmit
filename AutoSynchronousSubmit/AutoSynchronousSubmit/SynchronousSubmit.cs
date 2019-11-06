@@ -311,6 +311,8 @@ namespace AutoSynchronousSubmit
             mtd.CREATETIME = head.CreateDate;
             mtd.QLLX = head.RightType; // 权利类型
             mtd.YWLX = head.RecType; // 业务类型
+            mtd.DJLX = head.RegType; // 登记类型
+            mtd.YWH = head.RecFlowID; // 业务号
             mmr.Insert("MSGTIMERECORD","PID",false,mtd);
 
         }
