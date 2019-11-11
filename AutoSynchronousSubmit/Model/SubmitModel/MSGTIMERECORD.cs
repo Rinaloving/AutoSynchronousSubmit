@@ -38,6 +38,11 @@ namespace Model.SubmitModel
         public string DJLX { get; set; }
         [Column("YWH")]
         public string YWH { get; set; }
-
+        [Column("AJZT")]
+        public string AJZT { get; set; }
+        [Column("QSZT")]
+        public string QSZT { get; set; }
+        [Column("DJXL")]
+        public string DJXL { get; set; }
     }
 }
