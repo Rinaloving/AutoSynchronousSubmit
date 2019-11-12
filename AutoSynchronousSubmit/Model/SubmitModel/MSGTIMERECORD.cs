@@ -44,5 +44,11 @@ namespace Model.SubmitModel
         public string QSZT { get; set; }
         [Column("DJXL")]
         public string DJXL { get; set; }
+
+        [Column("UPTIME")]
+        public DateTime? UPTIME { get; set; }
+
+        [Column("UPSTATUS")]
+        public string UPSTATUS { get; set; }
     }
 }

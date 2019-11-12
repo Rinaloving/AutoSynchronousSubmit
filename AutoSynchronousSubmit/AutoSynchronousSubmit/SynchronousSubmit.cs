@@ -1,4 +1,6 @@
-﻿using AutoSynchronousSubmit.CommonClass;
+﻿using AutoSubmit.JkModel;
+using AutoSynchronousSubmit.CommonClass;
+using BLL.JkBll;
 using BLL.SubmitBll;
 using CCWin;
 using Model.SubmitModel;
@@ -120,9 +122,17 @@ namespace AutoSynchronousSubmit
                 RNANDCN rnandcn = new RNANDCN();
                 MSGTIMERECORD mtd = new MSGTIMERECORD();
                 RnandcnManager rm = new RnandcnManager();
+                MsgmanageManager mgr = new MsgmanageManager(); // JK库的MSGMANAGE表
                 string today = head.CreateDate.ToString("yyyyMMdd");
                 //string today2 = "20191018";
                 ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '"+head.PreEstateNum+"' and to_char(createtime,'yyyyMMdd') = '"+ today + "' ");
+                MSGMANAGE msg = mgr.Query("select * from MSGMANAGE WHERE ESTATENUM ='" + head.PreEstateNum + "' and to_char(CREATEDATE,'yyyyMMdd') = '" + today + "'").ToList().FirstOrDefault();
+                if (msg !=null)
+                {
+                    mtd.UPTIME = msg.UPTIME; //上传时间
+                    mtd.UPSTATUS = Convert.ToString(msg.UPSTATUS); //报文状态
+                }    
+
                 if (list.Count==0)
                 {
                     InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head, ref createtime);

@@ -56,6 +56,8 @@
     <Compile Include="BaseDAL.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="DbHelper\DbContextFactory.cs" />
+    <Compile Include="JKBaseDAL.cs" />
+    <Compile Include="JkDal\MsgmanageDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubmitDal\BizandrepDAL.cs" />
     <Compile Include="SubmitDal\EntityDAL.cs" />

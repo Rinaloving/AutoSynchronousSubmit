@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JkModel\MSGMANAGE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubmitModel\ACCESSLOG.cs" />
     <Compile Include="SubmitModel\BIZANDREP.cs" />
@@ -98,5 +99,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
