@@ -21,5 +21,16 @@ namespace BLL.SubmitBll
         {
             return ety.Query(sql);
         }
+
+        public int Update(MSGTIMERECORD entity)
+        {
+            return ety.Update(entity);
+        }
+
+        public int Update(MSGTIMERECORD poco, object primaryKeyValue, IEnumerable<string> columns)
+        {
+            return ety.Update(poco,primaryKeyValue,columns);
+        }
+
     }
 }

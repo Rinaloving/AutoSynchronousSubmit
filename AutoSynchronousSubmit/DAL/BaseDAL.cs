@@ -46,7 +46,12 @@ namespace DAL
 
         public int Update(T entity)
         {
-            throw new NotImplementedException();
+            return context.Update(entity);
+        }
+
+        public int Update(object poco, object primaryKeyValue, IEnumerable<string> columns)
+        {
+            return context.Update(poco,primaryKeyValue,columns);
         }
     }
 }

@@ -44,6 +44,11 @@ namespace DAL
             throw new NotImplementedException();
         }
 
+        public int Update(object entity)
+        {
+            return context.Update(entity);
+        }
+
         public int Update(T entity)
         {
             throw new NotImplementedException();

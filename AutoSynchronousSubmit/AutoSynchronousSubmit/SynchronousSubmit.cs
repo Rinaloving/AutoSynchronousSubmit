@@ -123,6 +123,7 @@ namespace AutoSynchronousSubmit
                 MSGTIMERECORD mtd = new MSGTIMERECORD();
                 RnandcnManager rm = new RnandcnManager();
                 MsgmanageManager mgr = new MsgmanageManager(); // JK库的MSGMANAGE表
+                MsgtimerecordManager mdr = new MsgtimerecordManager();
                 string today = head.CreateDate.ToString("yyyyMMdd");
                 //string today2 = "20191018";
                 ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '"+head.PreEstateNum+"' and to_char(createtime,'yyyyMMdd') = '"+ today + "' ");
@@ -152,7 +153,18 @@ namespace AutoSynchronousSubmit
                     mtd.QSZT = qszt;
                     mtd.DJXL = djxl;
                     InsertMSGTIMERECORD(Guid.NewGuid().ToString(), mtd, head);
+            }
+            else
+            {
+                //根据JK库报文状态，实时更新。
+                MSGTIMERECORD msgtd = mdr.Query("select * from MSGTIMERECORD WHERE BDCDYH ='" + head.PreEstateNum + "' and to_char(CREATETIME,'yyyyMMdd') = '" + today + "'").ToList().FirstOrDefault();
+                if (msgtd!=null)
+                {
+                    msgtd.UPSTATUS = mtd.UPSTATUS;
+                    UpdateMSGTIMERECORD(msgtd);
                 }
+
+            }
  
 
         }
@@ -331,6 +343,12 @@ namespace AutoSynchronousSubmit
             mtd.YWH = head.RecFlowID; // 业务号
             mmr.Insert("MSGTIMERECORD","PID",false,mtd);
 
+        }
+
+        public void UpdateMSGTIMERECORD(MSGTIMERECORD mtd)
+        {
+            MsgtimerecordManager mmr = new MsgtimerecordManager();
+            mmr.Update(mtd);
         }
 
         public List<dynamic> GetSmtInstance(string file,Head head, ref DateTime? djsj, ref DateTime? slsj, ref DateTime? zxsj,ref string ajzt,ref string qszt,ref string djxl)
