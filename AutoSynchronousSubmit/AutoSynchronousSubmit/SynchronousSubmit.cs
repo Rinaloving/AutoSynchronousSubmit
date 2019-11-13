@@ -428,15 +428,33 @@ namespace AutoSynchronousSubmit
                         {
                             ajzt = entity.AJZT;
                         }
-                        else if (fields[i].Name.ToString() == "QSZT")
-                        {
-                            qszt = entity.QSZT;
-                        }
+                       
                         else if (fields[i].Name.ToString() == "DJXL")
                         {
                             djxl = entity.DJXL;
                         }
                     }
+                    else if ("QLT_FW_FDCQ_YZ".Equals(currentNodeName.LocalName.ToString().Trim()))
+                    {
+                        if (fields[i].Name.ToString() == "QSZT")
+                        {
+                            qszt = entity.QSZT;
+                        }
+                    }
+                    else if ("QLF_QL_DYAQ".Equals(currentNodeName.LocalName.ToString().Trim()))
+                    {
+                        if (fields[i].Name.ToString() == "QSZT")
+                        {
+                            qszt = entity.QSZT;
+                        }
+                    }else if ("QLF_QL_YGDJ".Equals(currentNodeName.LocalName.ToString().Trim()))
+                    {
+                        if (fields[i].Name.ToString() == "QSZT")
+                        {
+                            qszt = entity.QSZT;
+                        }
+                    }
+                    
 
                 }
 
