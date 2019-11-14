@@ -33,7 +33,9 @@ namespace AutoSynchronousSubmit
         // CircularProgressBar.CircularProgressBar cbar = new CircularProgressBar.CircularProgressBar();
 
 
-
+        private List<string> QSZTTables = new List<string>() { "QLF_FW_FDCQ_QFSYQ", "QLF_QL_CFDJ", "QLF_QL_DYAQ",
+            "QLF_QL_DYIQ","QLF_QL_HYSYQ","QLF_QL_JSYDSYQ","QLF_QL_NYDSYQ","QLF_QL_QTXGQL","QLF_QL_YGDJ",
+            "QLF_QL_YYDJ","QLT_FW_FDCQ_DZ","QLT_FW_FDCQ_YZ","QLT_QL_GJZWSYQ","QLT_QL_LQ" };
 
 
 
@@ -357,70 +359,70 @@ namespace AutoSynchronousSubmit
                 
 
             IEnumerable<XNode> val = XElement.Load(file).Element("Data").Nodes(); // 获取子节点值
-                foreach (XNode it in val)
+            foreach (XNode it in val)
+            {
+                XElement val2 = (XElement)it; // 获取子节点值 RNANDCN
+                var currentNodeName = val2.Name; // 当前节点名
+                IEnumerable<XAttribute> m = val2.Attributes();
+
+                //反射获取表实例
+                Assembly assembly = Assembly.LoadFrom(SystemHandler.assPath);
+                dynamic entity = assembly.CreateInstance("Model.SubmitModel." + currentNodeName);
+                PropertyInfo[] fields = entity.GetType().GetProperties(); // 获取指定对象的所有公共属性
+
+                for (int i = 0; i < fields.Length; i++)
                 {
-                    XElement val2 = (XElement)it; // 获取子节点值 RNANDCN
-                    var currentNodeName = val2.Name; // 当前节点名
-                    IEnumerable<XAttribute> m = val2.Attributes();
 
-                    //反射获取表实例
-                    Assembly assembly = Assembly.LoadFrom(SystemHandler.assPath);
-                    dynamic entity = assembly.CreateInstance("Model.SubmitModel." + currentNodeName);
-                    PropertyInfo[] fields = entity.GetType().GetProperties(); // 获取指定对象的所有公共属性
-
-                    for (int i = 0; i < fields.Length; i++)
+                    foreach (XAttribute ia in m)
                     {
-
-                        foreach (XAttribute ia in m)
+                        var value = ia.Value; //属性值
+                        var name = ia.Name; // 属性名
+                                            //如果属性与表中属性相同则赋值给对象
+                        if (fields[i].Name.ToString() == name.LocalName)
                         {
-                            var value = ia.Value; //属性值
-                            var name = ia.Name; // 属性名
-                            //如果属性与表中属性相同则赋值给对象
-                            if (fields[i].Name.ToString() == name.LocalName)
-                            {
-                                fields[i].SetValue(entity, ConvertValueType(fields, value.ToString(), i)); // 赋值
-                                break;
-                            }
-                            
-
-
+                            fields[i].SetValue(entity, ConvertValueType(fields, value.ToString(), i)); // 赋值
+                            break;
                         }
 
-                        if (fields[i].Name.ToString() == "PID")
-                        {
-                            fields[i].SetValue(entity, ConvertValueType(fields, Guid.NewGuid().ToString(), i)); // 赋值
-                        }
-                        else if (fields[i].Name.ToString() == "QXDM")
-                        {
-                            fields[i].SetValue(entity, ConvertValueType(fields, head.AreaCode, i)); // 赋值
-                        }
-                        else if (fields[i].Name.ToString() == "CASENUM")
-                        {
-                            fields[i].SetValue(entity, ConvertValueType(fields, head.RecFlowID, i)); // 赋值
-                        }
-                        else if (fields[i].Name.ToString() == "CREATETIME")
-                        {
-                            fields[i].SetValue(entity, ConvertValueType(fields, head.CreateDate, i)); // 赋值
-                        }else if (fields[i].Name.ToString() == "DJSJ")
-                        {
-                            djsj = entity.DJSJ ; // 赋值
-                         
-                        }
-                        else if (fields[i].Name.ToString() == "SLSJ")
-                        {
-                            slsj = entity.SLSJ;
-                        }else if (fields[i].Name.ToString() == "ZXSJ")
-                        {
-                            zxsj = entity.ZXSJ;
-                        }
-                        else if (fields[i].Name.ToString() == "QLLX")
-                        {
-                            fields[i].SetValue(entity, ConvertValueType(fields, head.RightType, i)); // 赋值
-                        }
-                        else if (fields[i].Name.ToString() == "YWLX")
-                        {
-                            fields[i].SetValue(entity, ConvertValueType(fields, head.RecType, i)); // 赋值
-                        }
+
+
+                    }
+
+                    if (fields[i].Name.ToString() == "PID")
+                    {
+                        fields[i].SetValue(entity, ConvertValueType(fields, Guid.NewGuid().ToString(), i)); // 赋值
+                    }
+                    else if (fields[i].Name.ToString() == "QXDM")
+                    {
+                        fields[i].SetValue(entity, ConvertValueType(fields, head.AreaCode, i)); // 赋值
+                    }
+                    else if (fields[i].Name.ToString() == "CASENUM")
+                    {
+                        fields[i].SetValue(entity, ConvertValueType(fields, head.RecFlowID, i)); // 赋值
+                    }
+                    else if (fields[i].Name.ToString() == "CREATETIME")
+                    {
+                        fields[i].SetValue(entity, ConvertValueType(fields, head.CreateDate, i)); // 赋值
+                    } else if (fields[i].Name.ToString() == "DJSJ")
+                    {
+                        djsj = entity.DJSJ; // 赋值
+
+                    }
+                    else if (fields[i].Name.ToString() == "SLSJ")
+                    {
+                        slsj = entity.SLSJ;
+                    } else if (fields[i].Name.ToString() == "ZXSJ")
+                    {
+                        zxsj = entity.ZXSJ;
+                    }
+                    else if (fields[i].Name.ToString() == "QLLX")
+                    {
+                        fields[i].SetValue(entity, ConvertValueType(fields, head.RightType, i)); // 赋值
+                    }
+                    else if (fields[i].Name.ToString() == "YWLX")
+                    {
+                        fields[i].SetValue(entity, ConvertValueType(fields, head.RecType, i)); // 赋值
+                    }
 
                     if ("DJT_DJ_SLSQ".Equals(currentNodeName.LocalName.ToString().Trim()))
                     {
@@ -428,32 +430,53 @@ namespace AutoSynchronousSubmit
                         {
                             ajzt = entity.AJZT;
                         }
-                       
+
                         else if (fields[i].Name.ToString() == "DJXL")
                         {
                             djxl = entity.DJXL;
                         }
                     }
-                    else if ("QLT_FW_FDCQ_YZ".Equals(currentNodeName.LocalName.ToString().Trim()))
-                    {
-                        if (fields[i].Name.ToString() == "QSZT")
+                    else {
+                        //C# Error CS1628: 不能在匿名方法、lambda 表达式或查询表达式中使用 ref 或 out 参数
+                        //QSZTTables.ForEach( p =>
+                        //{
+                        //    if (p.Equals(currentNodeName.LocalName.ToString().Trim()))
+                        //    {
+                        //        if (fields[i].Name.ToString() == "QSZT")
+                        //        {
+                        //            qszt = entity.QSZT;
+                        //        }
+                        //    }
+                        //}
+
+                        //);
+
+                        foreach (var item in QSZTTables)
                         {
-                            qszt = entity.QSZT;
+                            if (item.Equals(currentNodeName.LocalName.ToString().Trim()))
+                            {
+                                if (fields[i].Name.ToString() == "QSZT")
+                                {
+                                    qszt = entity.QSZT;
+                                }
+                            }
                         }
+
                     }
-                    else if ("QLF_QL_DYAQ".Equals(currentNodeName.LocalName.ToString().Trim()))
-                    {
-                        if (fields[i].Name.ToString() == "QSZT")
-                        {
-                            qszt = entity.QSZT;
-                        }
-                    }else if ("QLF_QL_YGDJ".Equals(currentNodeName.LocalName.ToString().Trim()))
-                    {
-                        if (fields[i].Name.ToString() == "QSZT")
-                        {
-                            qszt = entity.QSZT;
-                        }
-                    }
+                    
+                    //else if ("QLF_QL_DYAQ".Equals(currentNodeName.LocalName.ToString().Trim()))
+                    //{
+                    //    if (fields[i].Name.ToString() == "QSZT")
+                    //    {
+                    //        qszt = entity.QSZT;
+                    //    }
+                    //}else if ("QLF_QL_YGDJ".Equals(currentNodeName.LocalName.ToString().Trim()))
+                    //{
+                    //    if (fields[i].Name.ToString() == "QSZT")
+                    //    {
+                    //        qszt = entity.QSZT;
+                    //    }
+                    //}
                     
 
                 }
