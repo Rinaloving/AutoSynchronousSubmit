@@ -50,5 +50,7 @@ namespace Model.SubmitModel
 
         [Column("UPSTATUS")]
         public string UPSTATUS { get; set; }
+        [Column("BIZMSGID")]
+        public string BIZMSGID { get; set; }
     }
 }

@@ -9,3 +9,4 @@ D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\bin\Debug\IDAL.p
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\obj\Debug\IDAL.csproj.CoreCompileInputs.cache
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\obj\Debug\IDAL.dll
 D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\obj\Debug\IDAL.pdb
+D:\MyGithubWeb\AutoSynchronousSubmit\AutoSynchronousSubmit\IDAL\obj\Debug\IDAL.csprojAssemblyReference.cache
