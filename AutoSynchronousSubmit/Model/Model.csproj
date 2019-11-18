@@ -61,6 +61,7 @@
     <Compile Include="SubmitModel\DJT_DJ_SLSQ.cs" />
     <Compile Include="SubmitModel\FJ_F_100.cs" />
     <Compile Include="SubmitModel\Head.cs" />
+    <Compile Include="SubmitModel\HOLIDAY.cs" />
     <Compile Include="SubmitModel\IEntity.cs" />
     <Compile Include="SubmitModel\KTF_ZDBHQK.cs" />
     <Compile Include="SubmitModel\KTF_ZHBHQK.cs" />
