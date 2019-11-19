@@ -3,6 +3,7 @@ using AutoSynchronousSubmit.CommonClass;
 using BLL.JkBll;
 using BLL.SubmitBll;
 using CCWin;
+using Entitys;
 using Model.SubmitModel;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace AutoSynchronousSubmit
 
         private bool CanToClose = false;
         private bool IsRunning = false;
-      
+
         private DateTime startDate = Convert.ToDateTime(SystemHandler.startDate);
         // CircularProgressBar.CircularProgressBar cbar = new CircularProgressBar.CircularProgressBar();
 
@@ -83,7 +84,7 @@ namespace AutoSynchronousSubmit
                 IsRunning = false;
             }
 
-           
+
         }
 
         private void TmiStart_Click(object sender, EventArgs e)
@@ -98,7 +99,7 @@ namespace AutoSynchronousSubmit
 
 
             richTextBox1.AppendText("开启任务:" + DateTime.Now.ToString() + "\n");
-           
+
 
 
             timer_Tick(null, null);
@@ -110,89 +111,107 @@ namespace AutoSynchronousSubmit
         {
 
 
-                DateTime? createtime = null; // 创建时间
-                DateTime? djsj = null; // 登记时间
-                DateTime? slsj = null; // 受理时间
-                DateTime? zxsj = null; // 注销时间
-                string ajzt = null; // 案件状态
-                string qszt = null; // 权属装填
-                string djxl = null; // 登记类型名称
-                
+            DateTime? createtime = null; // 创建时间
+            DateTime? djsj = null; // 登记时间
+            DateTime? slsj = null; // 受理时间
+            DateTime? zxsj = null; // 注销时间
+            string ajzt = null; // 案件状态
+            string qszt = null; // 权属装填
+            string djxl = null; // 登记类型名称
 
-           
-                Head head = XMLHelper.GetBizHeadInfo(file);
-                RNANDCN rnandcn = new RNANDCN();
-                MSGTIMERECORD mtd = new MSGTIMERECORD();
-                RnandcnManager rm = new RnandcnManager();
-                MsgmanageManager mgr = new MsgmanageManager(); // JK库的MSGMANAGE表
-                MsgtimerecordManager mdr = new MsgtimerecordManager();
-                string today = head.CreateDate.ToString("yyyyMMdd");
-                //string today2 = "20191018";
-                ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '"+head.PreEstateNum+"' and to_char(createtime,'yyyyMMdd') = '"+ today + "' ");
-                MSGMANAGE msg = mgr.Query("select * from MSGMANAGE WHERE ESTATENUM ='" + head.PreEstateNum + "' and to_char(CREATEDATE,'yyyyMMdd') = '" + today + "'").ToList().FirstOrDefault();
-                if (msg !=null)
-                {
-                    mtd.UPTIME = msg.UPTIME; //上传时间
-                    mtd.UPSTATUS = Convert.ToString(msg.UPSTATUS); //报文状态
-                }    
 
-                if (list.Count==0)
+
+            Head head = XMLHelper.GetBizHeadInfo(file);
+            RNANDCN rnandcn = new RNANDCN();
+            MSGTIMERECORD mtd = new MSGTIMERECORD();
+            RnandcnManager rm = new RnandcnManager();
+            MsgmanageManager mgr = new MsgmanageManager(); // JK库的MSGMANAGE表
+            MsgtimerecordManager mdr = new MsgtimerecordManager();
+            HolidayManager hgr = new HolidayManager();
+            string today = head.CreateDate.ToString("yyyyMMdd");
+            //string today2 = "20191018";
+            ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '" + head.PreEstateNum + "' and to_char(createtime,'yyyyMMdd') = '" + today + "' ");
+            MSGMANAGE msg = mgr.Query("select * from MSGMANAGE WHERE ESTATENUM ='" + head.PreEstateNum + "' and to_char(CREATEDATE,'yyyyMMdd') = '" + today + "'").ToList().FirstOrDefault();
+            if (msg != null)
+            {
+                mtd.UPTIME = msg.UPTIME; //上传时间
+                mtd.UPSTATUS = Convert.ToString(msg.UPSTATUS); //报文状态
+            }
+
+            if (list.Count == 0)
+            {
+                InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head, ref createtime);
+                List<dynamic> entities = GetSmtInstance(file, head, ref djsj, ref slsj, ref zxsj, ref ajzt, ref qszt, ref djxl);
+                string[] entityName = GetBizDataSonNodeName(file).ToArray();
+                int index = 0;
+                foreach (var entity in entities)
                 {
-                    InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head, ref createtime);
-                    List<dynamic> entities = GetSmtInstance(file, head,ref djsj,ref slsj,ref zxsj,ref ajzt,ref qszt,ref djxl);
-                    string[] entityName = GetBizDataSonNodeName(file).ToArray();
-                    int index = 0;
-                    foreach (var entity in entities)
-                    {
-                        EntityManager em = new EntityManager();
-                        em.Insert(entityName[index], "PID", false, entity);
-                        index++;
-                    }
-                    mtd.DJSJ = djsj;
-                    mtd.SLSJ = slsj;
-                    mtd.ZXSJ = zxsj;
-                    mtd.AJZT = ajzt;
-                    mtd.QSZT = qszt;
-                    mtd.DJXL = djxl;
-                    InsertMSGTIMERECORD(Guid.NewGuid().ToString(), mtd, head);
+                    EntityManager em = new EntityManager();
+                    em.Insert(entityName[index], "PID", false, entity);
+                    index++;
+                }
+                mtd.DJSJ = djsj;
+                mtd.SLSJ = slsj;
+                mtd.ZXSJ = zxsj;
+                mtd.AJZT = ajzt;
+                mtd.QSZT = qszt;
+                mtd.DJXL = djxl;
+                //HOLIDAY holiday = hgr.Query("SELECT * FROM HOLIDAY WHERE TO_CHAR(DAY,'yyyyMMdd') = "+ today + "").FirstOrDefault();
+                //if (holiday!=null)
+                //{
+                //    mtd.ISHOLIDAY = holiday.STATUS;
+                //}
+                if ("2".Equals(qszt) && slsj != null && zxsj != null)
+                {
+                    mtd.ISHOLIDAY = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[0].ToString();
+                    mtd.INTERVAL = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[1].ToString();
+                }
+                else if (slsj != null && djsj != null)
+                {
+                    mtd.ISHOLIDAY = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[0].ToString();
+                    mtd.INTERVAL = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[1].ToString();
+                }
+
+
+                InsertMSGTIMERECORD(Guid.NewGuid().ToString(), mtd, head);
             }
             else
             {
                 //根据JK库报文状态，实时更新。
                 MSGTIMERECORD msgtd = mdr.Query("select * from MSGTIMERECORD WHERE BDCDYH ='" + head.PreEstateNum + "' and to_char(CREATETIME,'yyyyMMdd') = '" + today + "'").ToList().FirstOrDefault();
-                if (msgtd!=null)
+                if (msgtd != null)
                 {
                     msgtd.UPSTATUS = mtd.UPSTATUS;
                     UpdateMSGTIMERECORD(msgtd);
                 }
 
             }
- 
+
 
         }
 
-        public  void  UpdateCircleBar(string path)
+        public void UpdateCircleBar(string path)
         {
             string[] files = XMLHelper.GetBizFile(path);
             int length = files.Length;
             double num = 0d;
             Thread thread = new Thread(new ThreadStart(new Action(delegate {
-                for (int i = 0; i <length; i++)
+                for (int i = 0; i < length; i++)
                 {
                     Thread.Sleep(10);
                     this.circleProgramBar1.MaxValue = 100;
-                    num = (((double)i /length) * 100);
+                    num = (((double)i / length) * 100);
                     AnalysisBizFileToSubmit(files[i]);
-                    
+
                     this.circleProgramBar1.Progress = (int)num + 1;
                     Action<int> action = (data) =>
                     {
-                        
-                        if (length-i>0)
+
+                        if (length - i > 0)
                         {
                             this.richTextBox1.AppendText("解析报文: " + Path.GetFileName(files[i]) + " 完成！\n");
                         }
-                         if(length-i<=1)
+                        if (length - i <= 1)
                         {
                             this.richTextBox1.AppendText("完成任务:" + DateTime.Now.ToString() + "\n");
                             this.circleProgramBar1.Progress = 100;
@@ -209,47 +228,47 @@ namespace AutoSynchronousSubmit
                     };
 
                     Invoke(action, i);
-                    
+
                 }
 
             })));
             thread.IsBackground = true;
             thread.Start();
-            
+
 
         }
 
-        public void   BackUpBizFileUpdateCircleBar(int lenth, string p,int i,string localPath)
+        public void BackUpBizFileUpdateCircleBar(int lenth, string p, int i, string localPath)
         {
 
             double num = (((double)i / lenth) * 100);
             //string[] files = XMLHelper.GetBizFile(path);
-            Thread thread = new Thread(new ThreadStart(new Action( delegate {
- 
-                    
-                  XMLHelper.BackupBizFile(p, localPath);
-  
-                  this.circleProgramBar1.MaxValue = 100;
-        
+            Thread thread = new Thread(new ThreadStart(new Action(delegate {
 
-                  this.circleProgramBar1.Progress = (int)num + 1;
-                    Action<int> action = (data) =>
+
+                XMLHelper.BackupBizFile(p, localPath);
+
+                this.circleProgramBar1.MaxValue = 100;
+
+
+                this.circleProgramBar1.Progress = (int)num + 1;
+                Action<int> action = (data) =>
+                {
+                    if (lenth - i > 0)
                     {
-                        if (lenth - i > 0)
-                        {
-                            this.richTextBox1.AppendText("备份报文: " + Path.GetFileName(p) + " 完成！\n");
-                        }
-                        
-                        if (lenth - i <= 1)
-                        {
-                            this.richTextBox1.AppendText("完成备份任务:" + DateTime.Now.ToString() + "\n");
-                            this.circleProgramBar1.Progress = 100;
-                        }
-                    };
+                        this.richTextBox1.AppendText("备份报文: " + Path.GetFileName(p) + " 完成！\n");
+                    }
 
-                    Invoke(action, (int)i);
+                    if (lenth - i <= 1)
+                    {
+                        this.richTextBox1.AppendText("完成备份任务:" + DateTime.Now.ToString() + "\n");
+                        this.circleProgramBar1.Progress = 100;
+                    }
+                };
 
-                
+                Invoke(action, (int)i);
+
+
 
             })));
             thread.IsBackground = true;
@@ -258,18 +277,18 @@ namespace AutoSynchronousSubmit
 
         }
 
-        public void   GroupBizFileUpdateCircleBar(int lenth, string p, int j, string analysisPath )
+        public void GroupBizFileUpdateCircleBar(int lenth, string p, int j, string analysisPath)
         {
             double num = (((double)j / lenth) * 100);
             //string[] files = XMLHelper.GetBizFile(path);
-            Thread thread = new Thread(new ThreadStart(new Action( delegate {
+            Thread thread = new Thread(new ThreadStart(new Action(delegate {
 
-                
-                 XMLHelper.GroupByCreateDate(p, analysisPath); // 执行按日期分组
-                
+
+                XMLHelper.GroupByCreateDate(p, analysisPath); // 执行按日期分组
+
                 this.circleProgramBar1.MaxValue = 100;
 
-               
+
 
                 this.circleProgramBar1.Progress = (int)num + 1;
 
@@ -280,7 +299,7 @@ namespace AutoSynchronousSubmit
                         this.richTextBox1.AppendText("分类报文: " + Path.GetFileName(p) + " 完成！\n");
                     }
 
-                    
+
                     if (lenth - j <= 1)
                     {
                         this.richTextBox1.AppendText("完成分类任务:" + DateTime.Now.ToString() + "\n");
@@ -288,7 +307,7 @@ namespace AutoSynchronousSubmit
                     }
                 };
 
-               Invoke(action, (int)j);
+                Invoke(action, (int)j);
 
 
 
@@ -299,7 +318,7 @@ namespace AutoSynchronousSubmit
 
         }
 
-        
+
         public List<string> GetBizDataSonNodeName(string file)
         {
             List<string> nodeNames = new List<string>();
@@ -307,7 +326,7 @@ namespace AutoSynchronousSubmit
             foreach (var it in val)
             {
                 XElement nodeName = (XElement)it; // 获取子节点值
-               nodeNames.Add(nodeName.Name.ToString()); // 当前节点名
+                nodeNames.Add(nodeName.Name.ToString()); // 当前节点名
             }
             return nodeNames;
         }
@@ -317,7 +336,7 @@ namespace AutoSynchronousSubmit
         /// <param name="pid"></param>
         /// <param name="rnandcn"></param>
         /// <param name="head"></param>
-        public void InsertRNANDCN(string pid,RNANDCN rnandcn, Head head, ref DateTime? createtime)
+        public void InsertRNANDCN(string pid, RNANDCN rnandcn, Head head, ref DateTime? createtime)
         {
             RnandcnManager rm = new RnandcnManager();
             rnandcn.PID = pid;
@@ -344,7 +363,7 @@ namespace AutoSynchronousSubmit
             mtd.DJLX = head.RegType; // 登记类型
             mtd.YWH = head.RecFlowID; // 业务号
             mtd.BIZMSGID = head.BizMsgID; // 报文名称
-            mmr.Insert("MSGTIMERECORD","PID",false,mtd);
+            mmr.Insert("MSGTIMERECORD", "PID", false, mtd);
 
         }
 
@@ -353,6 +372,96 @@ namespace AutoSynchronousSubmit
             MsgtimerecordManager mmr = new MsgtimerecordManager();
             mmr.Update(mtd);
         }
+
+        public bool QueryIsHoliday(HolidayManager hgr, DateTime t1)
+        {
+            string today = t1.ToString("yyyyMMdd");
+            //string status = null; 
+            HOLIDAY holiday = hgr.Query("SELECT * FROM HOLIDAY WHERE TO_CHAR(DAY,'yyyyMMdd') = " + today + "").FirstOrDefault();
+            if (holiday != null && (!"0".Equals(holiday.STATUS)))
+            {
+                return true; // 非工作日
+            }
+            else
+            {
+                return false; // 工作日
+            }
+        }
+
+        /// <summary>
+        /// 比较时间大小
+        /// </summary>
+        /// <returns></returns>
+        public int[] CompareDate(DateTime t1,DateTime t2, HolidayManager hgr)
+        {
+            
+            bool flag = true;
+            int num = 0;
+            int itervalnums = 0;
+
+            if (DateTime.Compare(t1, t2) > 0)
+            {
+                while (flag)
+                {
+
+                    if (DateTime.Compare(t1, t2) > 0)
+                    {
+                       
+                        
+                        if (QueryIsHoliday(hgr,t2))
+                        {
+                            num++;
+                        }
+                        t2 = t2.AddDays(1);
+                        itervalnums++;
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+
+
+                }
+                
+            }
+            else if (DateTime.Compare(t1, t2) == 0)
+            {
+                if (QueryIsHoliday(hgr, t2))
+                {
+                    num++;
+                }
+                
+            }
+            else
+            {
+                while (flag)
+                {
+
+                    if (DateTime.Compare(t1, t2) < 0)
+                    {
+                       
+                        
+                        if (QueryIsHoliday(hgr, t1))
+                        {
+                            num++;
+                        }
+                        t1 = t1.AddDays(1);
+                        itervalnums++;
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+
+
+                }
+               
+            }
+            int[] days = new int[] { num, itervalnums };
+            return days;
+
+        }
+
 
         public List<dynamic> GetSmtInstance(string file,Head head, ref DateTime? djsj, ref DateTime? slsj, ref DateTime? zxsj,ref string ajzt,ref string qszt,ref string djxl)
         {

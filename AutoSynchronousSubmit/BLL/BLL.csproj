@@ -46,6 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubmitBll\BizandrepManager.cs" />
     <Compile Include="SubmitBll\EntityManager.cs" />
+    <Compile Include="SubmitBll\HolidayManager.cs" />
     <Compile Include="SubmitBll\MsgtimerecordManager.cs" />
     <Compile Include="SubmitBll\RnandcnManager.cs" />
   </ItemGroup>
