@@ -129,6 +129,7 @@ namespace AutoSynchronousSubmit
             MsgtimerecordManager mdr = new MsgtimerecordManager();
             HolidayManager hgr = new HolidayManager();
             string today = head.CreateDate.ToString("yyyyMMdd");
+           
             //string today2 = "20191018";
             ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '" + head.PreEstateNum + "' and to_char(createtime,'yyyyMMdd') = '" + today + "' ");
             MSGMANAGE msg = mgr.Query("select * from MSGMANAGE WHERE ESTATENUM ='" + head.PreEstateNum + "' and to_char(CREATEDATE,'yyyyMMdd') = '" + today + "'").ToList().FirstOrDefault();
@@ -165,12 +166,15 @@ namespace AutoSynchronousSubmit
                 {
                     mtd.ISHOLIDAY = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[0].ToString();
                     mtd.INTERVAL = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[1].ToString();
+                    mtd.DVALUE = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[2].ToString();
                 }
                 else if (slsj != null && djsj != null)
                 {
                     mtd.ISHOLIDAY = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[0].ToString();
                     mtd.INTERVAL = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[1].ToString();
+                    mtd.DVALUE = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[2].ToString();
                 }
+                 
 
 
                 InsertMSGTIMERECORD(Guid.NewGuid().ToString(), mtd, head);
@@ -398,68 +402,80 @@ namespace AutoSynchronousSubmit
             bool flag = true;
             int num = 0;
             int itervalnums = 0;
-
-            if (DateTime.Compare(t1, t2) > 0)
+            int[] days = null;
+            if (t1.ToString("yyyyMMdd").Equals(t2.ToString("yyyyMMdd")))
             {
-                while (flag)
-                {
-
-                    if (DateTime.Compare(t1, t2) > 0)
-                    {
-                       
-                        
-                        if (QueryIsHoliday(hgr,t2))
-                        {
-                            num++;
-                        }
-                        t2 = t2.AddDays(1);
-                        itervalnums++;
-                    }
-                    else
-                    {
-                        flag = false;
-                    }
-
-
-                }
-                
-            }
-            else if (DateTime.Compare(t1, t2) == 0)
-            {
-                if (QueryIsHoliday(hgr, t2))
-                {
-                    num++;
-                }
-                
+                days = new int[] { num, itervalnums, itervalnums - num};
             }
             else
             {
-                while (flag)
-                {
-
-                    if (DateTime.Compare(t1, t2) < 0)
-                    {
-                       
-                        
-                        if (QueryIsHoliday(hgr, t1))
-                        {
-                            num++;
-                        }
-                        t1 = t1.AddDays(1);
-                        itervalnums++;
-                    }
-                    else
-                    {
-                        flag = false;
-                    }
-
-
-                }
-               
+                days = CalculateCompareDateValues(t1, t2, hgr, flag, num, itervalnums);
             }
-            int[] days = new int[] { num, itervalnums };
+
+
+           
             return days;
 
+        }
+
+        public int[] CalculateCompareDateValues(DateTime t1, DateTime t2, HolidayManager hgr,bool flag,int num,int itervalnums)
+        {
+
+                if (DateTime.Compare(t1, t2) > 0)
+                {
+                    while (flag && itervalnums < 1000)
+                    {
+
+                        if (DateTime.Compare(t1, t2) > 0)
+                        {
+
+
+                            if (QueryIsHoliday(hgr, t2))
+                            {
+                                num++;
+                            }
+
+                            itervalnums++;
+                            t2 = t2.AddDays(1);
+                        }
+                        else
+                        {
+                            flag = false;
+                        }
+
+
+                    }
+
+                }
+                else
+                {
+                    while (flag && itervalnums < 1000)
+                    {
+
+                        if (DateTime.Compare(t1, t2) < 0)
+                        {
+
+
+                            if (QueryIsHoliday(hgr, t1))
+                            {
+                                num++;
+                            }
+
+                            itervalnums++;
+                            t1 = t1.AddDays(1);
+
+                        }
+                        else
+                        {
+                            flag = false;
+                        }
+
+
+                    }
+
+                }
+            int[] days = new int[] { num, itervalnums, itervalnums-num };
+            return days;
         }
 
 
