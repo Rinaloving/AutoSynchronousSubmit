@@ -53,10 +53,10 @@ namespace Model.SubmitModel
         [Column("BIZMSGID")]
         public string BIZMSGID { get; set; }
         [Column("ISHOLIDAY")]
-        public string ISHOLIDAY { get; set; } // 正常工作日对应结果为 0, 法定节假日对应结果为 1, 节假日调休补班对应的结果为 2，休息日对应结果为 3 
+        public int ISHOLIDAY { get; set; } // 正常工作日对应结果为 0, 法定节假日对应结果为 1, 节假日调休补班对应的结果为 2，休息日对应结果为 3 
         [Column("INTERVAL")]
-        public string INTERVAL { get; set; }
+        public int INTERVAL { get; set; }
         [Column("DVALUE")]
-        public string DVALUE { get; set; }
+        public int DVALUE { get; set; }
     }
 }

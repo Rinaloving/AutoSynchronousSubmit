@@ -164,15 +164,15 @@ namespace AutoSynchronousSubmit
                 //}
                 if ("2".Equals(qszt) && slsj != null && zxsj != null)
                 {
-                    mtd.ISHOLIDAY = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[0].ToString();
-                    mtd.INTERVAL = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[1].ToString();
-                    mtd.DVALUE = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[2].ToString();
+                    mtd.ISHOLIDAY = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[0];
+                    mtd.INTERVAL = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[1];
+                    mtd.DVALUE = CompareDate((DateTime)slsj, (DateTime)zxsj, hgr)[2];
                 }
                 else if (slsj != null && djsj != null)
                 {
-                    mtd.ISHOLIDAY = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[0].ToString();
-                    mtd.INTERVAL = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[1].ToString();
-                    mtd.DVALUE = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[2].ToString();
+                    mtd.ISHOLIDAY = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[0];
+                    mtd.INTERVAL = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[1];
+                    mtd.DVALUE = CompareDate((DateTime)slsj, (DateTime)djsj, hgr)[2];
                 }
                  
 
