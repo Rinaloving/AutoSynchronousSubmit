@@ -107,7 +107,7 @@ namespace AutoSynchronousSubmit
 
         }
 
-        public void AnalysisBizFileToSubmit(string file)
+        public void AnalysisBizFileToSubmit(string file, string pid)
         {
 
 
@@ -128,11 +128,11 @@ namespace AutoSynchronousSubmit
             MsgmanageManager mgr = new MsgmanageManager(); // JK库的MSGMANAGE表
             MsgtimerecordManager mdr = new MsgtimerecordManager();
             HolidayManager hgr = new HolidayManager();
-            string today = head.CreateDate.ToString("yyyyMMdd");
+            string today = head.CreateDate.ToString("yyyyMMddhhmmss");
            
             //string today2 = "20191018";
-            ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '" + head.PreEstateNum + "' and to_char(createtime,'yyyyMMdd') = '" + today + "' ");
-            MSGMANAGE msg = mgr.Query("select * from MSGMANAGE WHERE ESTATENUM ='" + head.PreEstateNum + "' and to_char(CREATEDATE,'yyyyMMdd') = '" + today + "'").ToList().FirstOrDefault();
+            ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '" + head.PreEstateNum + "' and to_char(createtime,'yyyyMMddhhmiss') = '" + today + "' ");
+            MSGMANAGE msg = mgr.Query("select * from MSGMANAGE WHERE ESTATENUM ='" + head.PreEstateNum + "' and to_char(CREATEDATE,'yyyyMMddhhmiss') = '" + today + "'").ToList().FirstOrDefault();
             if (msg != null)
             {
                 mtd.UPTIME = msg.UPTIME; //上传时间
@@ -141,7 +141,7 @@ namespace AutoSynchronousSubmit
 
             if (list.Count == 0)
             {
-                InsertRNANDCN(Guid.NewGuid().ToString(), rnandcn, head, ref createtime);
+                InsertRNANDCN(pid, rnandcn, head, ref createtime);
                 List<dynamic> entities = GetSmtInstance(file, head, ref djsj, ref slsj, ref zxsj, ref ajzt, ref qszt, ref djxl);
                 string[] entityName = GetBizDataSonNodeName(file).ToArray();
                 int index = 0;
@@ -177,7 +177,7 @@ namespace AutoSynchronousSubmit
                  
 
 
-                InsertMSGTIMERECORD(Guid.NewGuid().ToString(), mtd, head);
+                InsertMSGTIMERECORD(pid, mtd, head);
             }
             else
             {
@@ -205,7 +205,8 @@ namespace AutoSynchronousSubmit
                     Thread.Sleep(10);
                     this.circleProgramBar1.MaxValue = 100;
                     num = (((double)i / length) * 100);
-                    AnalysisBizFileToSubmit(files[i]);
+                    string pid = Guid.NewGuid().ToString();
+                    AnalysisBizFileToSubmit(files[i],pid);
 
                     this.circleProgramBar1.Progress = (int)num + 1;
                     Action<int> action = (data) =>
