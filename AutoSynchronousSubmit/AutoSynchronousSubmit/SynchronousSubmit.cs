@@ -182,7 +182,7 @@ namespace AutoSynchronousSubmit
             else
             {
                 //根据JK库报文状态，实时更新。
-                MSGTIMERECORD msgtd = mdr.Query("select * from MSGTIMERECORD WHERE BDCDYH ='" + head.PreEstateNum + "' and to_char(CREATETIME,'yyyyMMdd') = '" + today + "'").ToList().FirstOrDefault();
+                MSGTIMERECORD msgtd = mdr.Query("select * from MSGTIMERECORD WHERE BDCDYH ='" + head.PreEstateNum + "' and to_char(CREATETIME,'yyyyMMddhhmiss') = '" + today + "'").ToList().FirstOrDefault();
                 if (msgtd != null)
                 {
                     msgtd.UPSTATUS = mtd.UPSTATUS;
