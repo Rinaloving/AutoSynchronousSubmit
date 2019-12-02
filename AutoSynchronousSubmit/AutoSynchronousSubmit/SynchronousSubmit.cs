@@ -131,8 +131,8 @@ namespace AutoSynchronousSubmit
             string today = head.CreateDate.ToString("yyyyMMddhhmmss");
            
             //string today2 = "20191018";
-            ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '" + head.PreEstateNum + "' and to_char(createtime,'yyyyMMddhhmiss') = '" + today + "' ");
-            MSGMANAGE msg = mgr.Query("select * from MSGMANAGE WHERE ESTATENUM ='" + head.PreEstateNum + "' and to_char(CREATEDATE,'yyyyMMddhhmiss') = '" + today + "'").ToList().FirstOrDefault();
+            ICollection<RNANDCN> list = rm.Query("select * from RNANDCN where realeunum = '" + head.PreEstateNum + "' and ywh='"+head.RecFlowID+"' and to_char(createtime,'yyyyMMddhhmiss') = '" + today + "' ");
+            MSGMANAGE msg = mgr.Query("select * from MSGMANAGE WHERE ESTATENUM ='" + head.PreEstateNum + "' and recflowid = '"+ head.RecFlowID + "' and to_char(CREATEDATE,'yyyyMMddhhmiss') = '" + today + "'").ToList().FirstOrDefault();
             if (msg != null)
             {
                 mtd.UPTIME = msg.UPTIME; //上传时间
@@ -182,7 +182,7 @@ namespace AutoSynchronousSubmit
             else
             {
                 //根据JK库报文状态，实时更新。
-                MSGTIMERECORD msgtd = mdr.Query("select * from MSGTIMERECORD WHERE BDCDYH ='" + head.PreEstateNum + "' and to_char(CREATETIME,'yyyyMMddhhmiss') = '" + today + "'").ToList().FirstOrDefault();
+                MSGTIMERECORD msgtd = mdr.Query("select * from MSGTIMERECORD WHERE BDCDYH ='" + head.PreEstateNum + "'and ywh = '"+head.RecFlowID+"' and to_char(CREATETIME,'yyyyMMddhhmiss') = '" + today + "'").ToList().FirstOrDefault();
                 if (msgtd != null)
                 {
                     msgtd.UPSTATUS = mtd.UPSTATUS;
